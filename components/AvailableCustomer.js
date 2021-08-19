@@ -78,7 +78,7 @@ const AvailableCustomer = (props) => {
                customButton={myIcon}
                destructiveIndex={1}
                options={["Mark as done", "Delete", "Cancel"]}
-               // actions={[, deletePost]}
+               actions={[() => {}, () => {}]}
             />
          </View>
 

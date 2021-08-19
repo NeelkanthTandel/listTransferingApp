@@ -52,7 +52,6 @@ const home = (props) => {
       } else {
          props.navigation.setOptions({
             title: "App Name",
-
             headerLeft: () => (
                <TouchableOpacity
                   onPress={() => props.navigation.toggleDrawer()}
