@@ -12,13 +12,15 @@ const home = (props) => {
       if (selected) {
          props.navigation.setOptions({
             title: "",
+            headerStyle: {
+               backgroundColor: Colors.secondary,
+            },
             headerLeft: () => (
                <TouchableOpacity onPress={() => setIsSelectAll(0)}>
                   <Ionicons
                      name="close-sharp"
                      size={23}
                      color={Colors.headerTitle}
-                     style={{ marginLeft: 15 }}
                   />
                </TouchableOpacity>
             ),
@@ -52,6 +54,9 @@ const home = (props) => {
       } else {
          props.navigation.setOptions({
             title: "App Name",
+            headerStyle: {
+               backgroundColor: Colors.headerBgColor,
+            },
             headerLeft: () => (
                <TouchableOpacity
                   onPress={() => props.navigation.toggleDrawer()}
