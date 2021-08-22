@@ -5,6 +5,7 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import ShopkeeperDrawerNavigator from "./ShopkeeperDrawerNavigator";
 
 import Colors from "../theme/colors";
+import loginScreen from "../screens/loginScreen";
 
 const Stack = createNativeStackNavigator();
 
@@ -23,6 +24,7 @@ class MainNavigator extends Component {
                      animation: "slide_from_right",
                   }}
                >
+                  <Stack.Screen name="loginScreen" component={loginScreen} />
                   <Stack.Screen
                      name="shopkeeperDrawer"
                      component={ShopkeeperDrawerNavigator}
