@@ -25,11 +25,11 @@ class MainNavigator extends Component {
                      animation: "slide_from_right",
                   }}
                >
+                  <Stack.Screen name="loginScreen" component={loginScreen} />
                   <Stack.Screen
                      name="chooseType"
                      component={chooseTypeScreen}
                   />
-                  <Stack.Screen name="loginScreen" component={loginScreen} />
                   <Stack.Screen
                      name="shopkeeperDrawer"
                      component={ShopkeeperDrawerNavigator}
