@@ -10,7 +10,7 @@ const loginScreen = (props) => {
       try {
          const result = await Google.logInAsync({
             androidClientId:
-               "295729975949-s720j7b1m3r6n4u4c8kjavugvqt32ppg.apps.googleusercontent.com",
+               "295729975949-pqhv120lksjjl52ojos88jm48ah5b1g1.apps.googleusercontent.com",
             scopes: ["profile", "email"],
          });
 

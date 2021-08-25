@@ -63,7 +63,7 @@ const home = (props) => {
                >
                   <Ionicons
                      name="ios-menu"
-                     size={23}
+                     size={25}
                      color={Colors.headerTitle}
                      style={{ marginRight: 15 }}
                   />

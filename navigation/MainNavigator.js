@@ -25,14 +25,19 @@ class MainNavigator extends Component {
                      animation: "simple_push",
                   }}
                >
-                  <Stack.Screen name="login" component={loginScreen} />
+                  {/* <Stack.Screen name="login" component={loginScreen} />
                   <Stack.Screen
                      name="chooseType"
                      component={chooseTypeScreen}
-                  />
+                  /> */}
                   <Stack.Screen
                      name="shopkeeperDrawer"
                      component={ShopkeeperDrawerNavigator}
+                     initialParams={{
+                        name: "Neelkanth",
+                        email: "skdjf",
+                        shopName: "asd",
+                     }}
                   />
                </Stack.Navigator>
             </NavigationContainer>

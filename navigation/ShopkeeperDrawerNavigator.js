@@ -8,6 +8,7 @@ import {
 } from "@react-navigation/drawer";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { StackActions } from "@react-navigation/native";
+import { Ionicons } from "@expo/vector-icons";
 
 import Colors from "../theme/colors";
 import homeScreen from "../screens/shopkeeper/homeScreen";
@@ -38,6 +39,7 @@ const shopkeeperNavigator = () => {
 const Drawer = createDrawerNavigator();
 
 export default function CustomerDrawerNavigator(Props) {
+   let toggleDrawer;
    return (
       <Drawer.Navigator
          screenOptions={{
@@ -54,8 +56,19 @@ export default function CustomerDrawerNavigator(Props) {
             headerStyle: {
                backgroundColor: Colors.headerBgColor,
             },
+            headerLeft: () => (
+               <TouchableOpacity onPress={() => toggleDrawer()}>
+                  <Ionicons
+                     name="ios-menu"
+                     size={25}
+                     color={Colors.headerTitle}
+                     style={{ marginLeft: 15 }}
+                  />
+               </TouchableOpacity>
+            ),
          }}
          drawerContent={(props) => {
+            toggleDrawer = props.navigation.toggleDrawer;
             return (
                <DrawerContentScrollView {...props}>
                   <View

@@ -27,15 +27,12 @@ export default function qrGeneratorScreen() {
       if (svg != null && !imageSaved) {
          await MediaLibrary.requestPermissionsAsync(MediaLibrary.CameraRoll);
          svg.toDataURL((data) => {
-            console.log("base64:", data);
-            console.log("inner:", FileSystem.cacheDirectory);
             FileSystem.writeAsStringAsync(
                FileSystem.cacheDirectory + "/shopQrCode.png",
                data,
                { encoding: FileSystem.EncodingType.Base64 }
             )
                .then((success) => {
-                  console.log("inner:", FileSystem.cacheDirectory);
                   return MediaLibrary.saveToLibraryAsync(
                      FileSystem.cacheDirectory + "/shopQrCode.png"
                   );

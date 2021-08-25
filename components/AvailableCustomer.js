@@ -30,7 +30,7 @@ const AvailableCustomer = (props) => {
             // width: 30,
             alignItems: "flex-end",
             padding: 15,
-            paddingLeft: 15,
+            paddingRight: 10,
             // backgroundColor: "white",
          }}
       >
@@ -62,7 +62,9 @@ const AvailableCustomer = (props) => {
                }
                setSelected(!selected);
             } else {
-               props.navigation.navigate("customerList")
+               props.navigation.navigate("customerList", {
+                  title: props.title,
+               });
             }
          }}
       >
