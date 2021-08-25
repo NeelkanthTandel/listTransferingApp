@@ -13,6 +13,7 @@ import Colors from "../theme/colors";
 import homeScreen from "../screens/shopkeeper/homeScreen";
 import historyScreen from "../screens/shopkeeper/historyScreen";
 import qrGeneratorScreen from "../screens/shopkeeper/qrGeneratorScreen";
+import customerListScreen from "../screens/shopkeeper/customerListScreen";
 
 const Stack = createNativeStackNavigator();
 
@@ -29,6 +30,7 @@ const shopkeeperNavigator = () => {
          }}
       >
          <Stack.Screen name="home" component={homeScreen} />
+         <Stack.Screen name="customerList" component={customerListScreen} />
       </Stack.Navigator>
    );
 };

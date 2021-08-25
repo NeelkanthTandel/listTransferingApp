@@ -84,6 +84,7 @@ const home = (props) => {
             selected={selected}
             isSelectAll={isSelectAll}
             title="Customer 1"
+            navigation={props.navigation}
          />
          <AvailableCustomer
             style={styles.availableCustomer}
@@ -92,6 +93,7 @@ const home = (props) => {
             selected={selected}
             isSelectAll={isSelectAll}
             title="Customer 2"
+            navigation={props.navigation}
          />
          <AvailableCustomer
             style={styles.availableCustomer}
@@ -100,6 +102,7 @@ const home = (props) => {
             selected={selected}
             isSelectAll={isSelectAll}
             title="Customer 3"
+            navigation={props.navigation}
          />
       </View>
    );

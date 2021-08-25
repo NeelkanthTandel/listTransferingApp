@@ -61,7 +61,9 @@ const AvailableCustomer = (props) => {
                   props.setIsSelectAll(-1);
                }
                setSelected(!selected);
-            } else console.log("Pressed");
+            } else {
+               props.navigation.navigate("customerList")
+            }
          }}
       >
          <View
