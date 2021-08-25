@@ -1,107 +1,143 @@
-import React from "react";
+import React, { useState } from "react";
 import {
    StyleSheet,
    Text,
    View,
    TouchableOpacity,
    TextInput,
+   KeyboardAvoidingView,
+   ScrollView,
 } from "react-native";
+import { StackActions } from "@react-navigation/native";
 
-const chooseTypeScreen = (props) => {
+import Colors from "../theme/colors";
+
+const ChooseTypeScreen = (props) => {
+   const [isShopkeeper, setIsShopkeeper] = useState(false);
+   const [shopName, setShopName] = useState("");
    return (
-      <View style={styles.screen}>
-         <View
-            style={{
-               borderBottomColor: "black",
-               borderBottomWidth: 1,
-               width: "100%",
-               paddingVertical: 10,
-               //  paddingTop: 150,
-            }}
-         >
+      <KeyboardAvoidingView
+         behavior="height"
+         style={{ flex: 1, backgroundColor: Colors.backgroundColor }}
+      >
+         <View style={styles.screen}>
             <Text style={styles.Text}>Last Step</Text>
-         </View>
-         <Text style={styles.TypeText}>Choose Account Type</Text>
+            <Text style={styles.TypeText}>Choose Account Type</Text>
 
-         <TouchableOpacity style={styles.customerButton}>
-            <Text style={styles.ButtonText}>Customer</Text>
+            <View
+               style={{
+                  marginVertical: 30,
+                  alignSelf: "center",
+                  marginTop: 100,
+               }}
+            >
+               <TouchableOpacity
+                  style={{
+                     ...styles.button,
+                     backgroundColor: isShopkeeper
+                        ? Colors.primary
+                        : Colors.secondary,
+                  }}
+                  onPress={() => setIsShopkeeper(false)}
+                  activeOpacity={0.9}
+               >
+                  <Text style={styles.ButtonText}>Customer</Text>
+               </TouchableOpacity>
+               <TouchableOpacity
+                  style={{
+                     ...styles.button,
+                     backgroundColor: !isShopkeeper
+                        ? Colors.primary
+                        : Colors.secondary,
+                  }}
+                  onPress={() => setIsShopkeeper(true)}
+                  activeOpacity={0.9}
+               >
+                  <Text style={styles.ButtonText}>Shopkeeper</Text>
+               </TouchableOpacity>
+            </View>
+         </View>
+         {isShopkeeper ? (
+            <TextInput
+               placeholder="Enter your shop name"
+               onChangeText={(val) => setShopName(val)}
+               style={styles.input}
+            />
+         ) : null}
+         <TouchableOpacity
+            style={styles.Finish}
+            activeOpacity={0.6}
+            onPress={() =>
+               isShopkeeper && shopName
+                  ? props.navigation.dispatch(
+                       StackActions.replace("shopkeeperDrawer", {
+                          shopName,
+                          email: props.route.params.email,
+                          name: props.route.params.name,
+                       })
+                    )
+                  : null
+            }
+         >
+            <Text style={styles.FinishText}>Finish</Text>
          </TouchableOpacity>
-         <TouchableOpacity style={styles.shopkeeperButton} onPress={inputName}>
-            <Text style={styles.ButtonText}>Shopkeeper</Text>
-         </TouchableOpacity>
-      </View>
+      </KeyboardAvoidingView>
    );
-};
-const inputName = () => {
-   <View>
-      <TouchableOpacity style={styles.InputName}>
-         <TextInput>Shop Name</TextInput>
-      </TouchableOpacity>
-      <TouchableOpacity style={styles.Finish}>
-         <Text>Finish</Text>
-      </TouchableOpacity>
-   </View>;
 };
 
 const styles = StyleSheet.create({
    screen: {
-      padding: 1,
       flex: 1,
-      backgroundColor: "#e8f0f2",
-      alignItems: "center",
-      // justifyContent: "center",
+      paddingHorizontal: 20,
+      // height: "100%",
    },
    Text: {
-      fontSize: 18,
+      marginVertical: 5,
+      fontSize: 14,
+      color: Colors.textSecondary,
       textAlign: "center",
    },
    TypeText: {
-      paddingTop: 50,
-      fontSize: 23,
+      // paddingTop: 20,
+      fontSize: 18,
+      fontWeight: "bold",
       textAlign: "center",
-      paddingBottom: 20,
    },
-   customerButton: {
-      // paddingBottom: 60,
-      height: 150,
+   button: {
+      height: 130,
       width: 130,
-      borderRadius: 15,
-      backgroundColor: "#a2dbf4",
-      alignSelf: "center",
-      justifyContent: "space-between",
-   },
-   shopkeeperButton: {
-      // padditingTop:10,
-      height: 150,
-      width: 130,
-      borderRadius: 15,
-      backgroundColor: "#a2dbf4",
-      alignSelf: "center",
-      justifyContent: "space-between",
-   },
-   InputName: {
-      height: 50,
-      width: 250,
-      borderRadius: 15,
-      backgroundColor: "#a2dbf4",
+      marginVertical: 30,
+      borderRadius: 20,
+      justifyContent: "flex-end",
+      padding: 10,
+      alignItems: "center",
    },
    ButtonText: {
-      paddingTop: 110,
-      fontSize: 18,
-      textAlign: "center",
+      fontSize: 16,
+      color: Colors.textPrimary,
    },
-   InputName: {
-      height: 30,
-      width: 300,
-      borderRadius: 15,
-      backgroundColor: "#a2dbf4",
+   input: {
+      marginHorizontal: 20,
+      marginHorizontal: 30,
+      paddingVertical: 10,
+      paddingHorizontal: 15,
+      borderRadius: 10,
+      backgroundColor: Colors.primary,
    },
+
    Finish: {
-      height: 30,
-      width: 300,
-      borderRadius: 15,
-      backgroundColor: "#a2dbf4",
+      width: "100%",
+      alignSelf: "center",
+      paddingVertical: 15,
+      marginTop: 30,
+      backgroundColor: Colors.headerBgColor,
+   },
+   FinishText: {
+      color: Colors.headerTitle,
+      fontSize: 18,
+      fontWeight: "bold",
+      textAlign: "center",
    },
 });
 
-export default chooseTypeScreen;
+export default ChooseTypeScreen;

@@ -1,10 +1,11 @@
 import React from "react";
-import { StyleSheet, Text, View, TouchableOpacity } from "react-native";
+import { StyleSheet, Text, View, TouchableOpacity, Image } from "react-native";
 import * as Google from "expo-google-app-auth";
+import { StackActions } from "@react-navigation/native";
 
 import Colors from "../theme/colors";
 
-const loginScreen = () => {
+const loginScreen = (props) => {
    const signInWithGoogleAsync = async () => {
       try {
          const result = await Google.logInAsync({
@@ -15,6 +16,12 @@ const loginScreen = () => {
 
          if (result.type === "success") {
             console.log(result.user);
+            props.navigation.dispatch(
+               StackActions.replace("chooseType", {
+                  email: result.user.email,
+                  name: result.user.name,
+               })
+            );
          } else {
             return { cancelled: true };
          }
@@ -27,11 +34,21 @@ const loginScreen = () => {
       <View style={styles.screen}>
          <Text style={styles.text}>App Name</Text>
          <View style={styles.box}>
-            <Text style={styles.Text}>Login/Signup</Text>
+            <Text style={styles.Text}>Register / Sign In</Text>
             <TouchableOpacity
+               activeOpacity={0.8}
                style={styles.button}
                onPress={signInWithGoogleAsync}
             >
+               <Image
+                  source={require("../assets/images/btn_google_light_normal_edit.png")}
+                  style={{
+                     width: 25,
+                     height: 25,
+                     position: "absolute",
+                     left: 15,
+                  }}
+               />
                <Text style={styles.textBox}>Continue with Google</Text>
             </TouchableOpacity>
          </View>
@@ -52,8 +69,8 @@ const styles = StyleSheet.create({
    },
    box: {
       width: "100%",
-      borderTopLeftRadius: 50,
-      borderTopRightRadius: 50,
+      borderTopLeftRadius: 30,
+      borderTopRightRadius: 30,
       backgroundColor: Colors.secondary,
       alignItems: "center",
    },
@@ -63,14 +80,16 @@ const styles = StyleSheet.create({
       color: "#ffff",
    },
    button: {
+      paddingLeft: 15,
       width: "85%",
       paddingVertical: 6,
       borderRadius: 100,
       backgroundColor: "white",
-      textAlign: "center",
       alignItems: "center",
       marginBottom: 30,
       marginTop: 80,
+      flexDirection: "row",
+      justifyContent: "center",
    },
    textBox: {
       padding: 8,

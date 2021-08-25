@@ -22,10 +22,10 @@ class MainNavigator extends Component {
                <Stack.Navigator
                   screenOptions={{
                      headerShown: false,
-                     animation: "slide_from_right",
+                     animation: "simple_push",
                   }}
                >
-                  <Stack.Screen name="loginScreen" component={loginScreen} />
+                  <Stack.Screen name="login" component={loginScreen} />
                   <Stack.Screen
                      name="chooseType"
                      component={chooseTypeScreen}
