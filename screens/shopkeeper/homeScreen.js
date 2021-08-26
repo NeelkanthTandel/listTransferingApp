@@ -76,6 +76,15 @@ const home = (props) => {
    return (
       <View style={styles.screen}>
          <Text style={styles.title}>Available Customer</Text>
+         <Text
+            style={{
+               fontSize: 12,
+               color: Colors.textSecondary,
+               marginBottom: 20,
+            }}
+         >
+            Tap on customer to open their list
+         </Text>
 
          <AvailableCustomer
             style={styles.availableCustomer}
@@ -121,7 +130,6 @@ const styles = StyleSheet.create({
       fontSize: 18,
       color: Colors.textPrimary,
       fontWeight: "bold",
-      marginBottom: 30,
    },
    availableCustomer: {
       marginBottom: 20,

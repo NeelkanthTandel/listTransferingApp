@@ -7,6 +7,7 @@ import {
    TextInput,
    KeyboardAvoidingView,
    ScrollView,
+   Alert,
 } from "react-native";
 import { StackActions } from "@react-navigation/native";
 
@@ -76,6 +77,8 @@ const ChooseTypeScreen = (props) => {
                           name: props.route.params.name,
                        })
                     )
+                  : !shopName && isShopkeeper
+                  ? Alert.alert("Message", "Please enter shop name")
                   : null
             }
          >
