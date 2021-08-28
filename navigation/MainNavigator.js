@@ -26,16 +26,15 @@ class MainNavigator extends Component {
                      animation: "simple_push",
                   }}
                >
-                  {/* <Stack.Screen name="login" component={loginScreen} />
+                  <Stack.Screen name="login" component={loginScreen} />
                   <Stack.Screen
                      name="chooseType"
                      component={chooseTypeScreen}
-                  /> */}
-                  {/* <Stack.Screen
+                  />
+                  <Stack.Screen
                      name="shopkeeperDrawer"
                      component={ShopkeeperDrawerNavigator}
-                     initialParams={{}}
-                  /> */}
+                  />
                   <Stack.Screen
                      name="customerDrawer"
                      component={CustomerDrawerNavigator}

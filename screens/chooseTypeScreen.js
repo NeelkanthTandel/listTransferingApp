@@ -69,7 +69,14 @@ const ChooseTypeScreen = (props) => {
             style={styles.Finish}
             activeOpacity={0.6}
             onPress={() =>
-               isShopkeeper && shopName
+               !isShopkeeper
+                  ? props.navigation.dispatch(
+                       StackActions.replace("customerDrawer", {
+                          email: props.route.params.email,
+                          name: props.route.params.name,
+                       })
+                    )
+                  : isShopkeeper && shopName
                   ? props.navigation.dispatch(
                        StackActions.replace("shopkeeperDrawer", {
                           shopName,

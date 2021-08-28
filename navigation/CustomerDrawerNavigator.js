@@ -7,6 +7,7 @@ import {
    DrawerItemList,
 } from "@react-navigation/drawer";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
+import { StackActions } from "@react-navigation/native";
 
 import Colors from "../theme/colors";
 // import homeScreen from "../screens/customer/homeScreen";
@@ -42,7 +43,7 @@ const customerNavigator = () => {
 
 const Drawer = createDrawerNavigator();
 
-export default function CustomerDrawerNavigator() {
+export default function CustomerDrawerNavigator(Props) {
    return (
       <Drawer.Navigator
          screenOptions={{
@@ -82,7 +83,12 @@ export default function CustomerDrawerNavigator() {
                   </Text>
                </View>
                <DrawerItemList {...props} />
-               <DrawerItem label="Log Out" onPress={() => {}} />
+               <DrawerItem
+                  label="Log Out"
+                  onPress={() =>
+                     Props.navigation.dispatch(StackActions.replace("login"))
+                  }
+               />
             </DrawerContentScrollView>
          )}
       >
