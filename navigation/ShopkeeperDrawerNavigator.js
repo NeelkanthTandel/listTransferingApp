@@ -38,7 +38,7 @@ const shopkeeperNavigator = () => {
 
 const Drawer = createDrawerNavigator();
 
-export default function CustomerDrawerNavigator(Props) {
+export default function ShopkeeperDrawerNavigator(Props) {
    let toggleDrawer;
    return (
       <Drawer.Navigator

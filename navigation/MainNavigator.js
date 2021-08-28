@@ -2,11 +2,12 @@ import React, { Component } from "react";
 import { StatusBar } from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import ShopkeeperDrawerNavigator from "./ShopkeeperDrawerNavigator";
 
 import Colors from "../theme/colors";
 import loginScreen from "../screens/loginScreen";
 import chooseTypeScreen from "../screens/chooseTypeScreen";
+import CustomerDrawerNavigator from "./CustomerDrawerNavigator";
+import ShopkeeperDrawerNavigator from "./ShopkeeperDrawerNavigator";
 
 const Stack = createNativeStackNavigator();
 
@@ -25,14 +26,19 @@ class MainNavigator extends Component {
                      animation: "simple_push",
                   }}
                >
-                  <Stack.Screen name="login" component={loginScreen} />
+                  {/* <Stack.Screen name="login" component={loginScreen} />
                   <Stack.Screen
                      name="chooseType"
                      component={chooseTypeScreen}
-                  />
-                  <Stack.Screen
+                  /> */}
+                  {/* <Stack.Screen
                      name="shopkeeperDrawer"
                      component={ShopkeeperDrawerNavigator}
+                     initialParams={{}}
+                  /> */}
+                  <Stack.Screen
+                     name="customerDrawer"
+                     component={CustomerDrawerNavigator}
                   />
                </Stack.Navigator>
             </NavigationContainer>
