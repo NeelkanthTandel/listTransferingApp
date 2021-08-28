@@ -28,6 +28,11 @@ const ShopkeeperProductView = (props) => {
             value={toggleCheckBox}
             onValueChange={(newValue) => {
                setToggleCheckBox(newValue);
+               if (newValue) {
+                  props.setCount((data) => data + 1);
+               } else {
+                  props.setCount((data) => data - 1);
+               }
             }}
             tintColors={{
                true: Colors.textPrimary,

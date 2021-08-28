@@ -16,11 +16,14 @@ import Colors from "../../theme/colors";
 
 const customerListScreen = (props) => {
    // const [isModalVisible, setIsModalVisible] = useState(true);
+   // let count = 0;
+   const [count, setCount] = useState(0);
+   console.log(count);
    useEffect(() => {
       props.navigation.setOptions({
          title: props.route.params.title,
       });
-   });
+   }, []);
    return (
       <>
          <View style={styles.screen}>
@@ -37,17 +40,20 @@ const customerListScreen = (props) => {
             <ShopkeeperProductView
                product="Product 1"
                quantity={10}
-               isGiven={true}
+               isGiven={false}
+               setCount={setCount}
             />
             <ShopkeeperProductView
                product="Product 2"
                quantity={4}
                isGiven={false}
+               setCount={setCount}
             />
             <ShopkeeperProductView
                product="Product 3"
                quantity={2}
                isGiven={false}
+               setCount={setCount}
             />
          </View>
          <View
@@ -61,17 +67,28 @@ const customerListScreen = (props) => {
          >
             <TouchableOpacity
                onPress={() => {
-                  Alert.alert(
-                     "Confirmation",
-                     "Few products are remaining. Do you want to still continue?",
-                     [
-                        { text: "Cancel", style: "cancel" },
-                        {
-                           text: "Continue",
-                           onPress: () => props.navigation.goBack(),
-                        },
-                     ]
-                  );
+                  if (count < 3) {
+                     Alert.alert(
+                        "Confirmation",
+                        "Few products are remaining. Do you want to still continue?",
+                        [
+                           { text: "Cancel", style: "cancel" },
+                           {
+                              text: "Continue",
+                              onPress: () =>
+                                 props.navigation.navigate("home", {
+                                    isDone: true,
+                                    listName: props.route.params.title,
+                                 }),
+                           },
+                        ]
+                     );
+                  } else {
+                     props.navigation.navigate("home", {
+                        isDone: true,
+                        listName: props.route.params.title,
+                     });
+                  }
                }}
                style={{
                   width: "100%",

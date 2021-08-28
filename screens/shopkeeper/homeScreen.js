@@ -1,5 +1,12 @@
 import React, { useState, useEffect } from "react";
-import { StyleSheet, View, Text, TouchableOpacity } from "react-native";
+import {
+   StyleSheet,
+   View,
+   Text,
+   TouchableOpacity,
+   ToastAndroid,
+} from "react-native";
+import { useIsFocused } from "@react-navigation/native";
 
 import Colors from "../../theme/colors";
 import AvailableCustomer from "../../components/AvailableCustomer";
@@ -8,6 +15,18 @@ import { Ionicons } from "@expo/vector-icons";
 const home = (props) => {
    const [selected, setSelected] = useState(false);
    const [isSelectAll, setIsSelectAll] = useState(-1);
+   const isFocused = useIsFocused();
+   useEffect(() => {
+      console.log(props.route.params?.isDone);
+      if (props.route.params?.isDone && isFocused) {
+         console.log("Done");
+         ToastAndroid.show(
+            "Done with " + props.route.params.listName,
+            ToastAndroid.SHORT
+         );
+         props.navigation.setParams({ isDone: false, listName: "" });
+      }
+   }, [isFocused]);
    useEffect(() => {
       if (selected) {
          props.navigation.setOptions({
