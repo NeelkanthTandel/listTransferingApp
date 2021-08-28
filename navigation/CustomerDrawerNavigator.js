@@ -10,10 +10,7 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { StackActions } from "@react-navigation/native";
 
 import Colors from "../theme/colors";
-// import homeScreen from "../screens/customer/homeScreen";
 import productListScreen from "../screens/customer/productListScreen";
-// import addProductsScreen from "../screens/customer/addProductsScreen";
-// import scannerScreen from "../screens/customer/scannerScreen";
 
 const Stack = createNativeStackNavigator();
 
@@ -29,14 +26,11 @@ const customerNavigator = () => {
             animation: "slide_from_right",
          }}
       >
-         {/* <Stack.Screen name="home" component={homeScreen} /> */}
          <Stack.Screen
             name="productList"
             component={productListScreen}
             initialParams={{}}
          />
-         {/* <Stack.Screen name="addProducts" component={addProductsScreen} /> */}
-         {/* <Stack.Screen name="scanner" component={scannerScreen} /> */}
       </Stack.Navigator>
    );
 };
