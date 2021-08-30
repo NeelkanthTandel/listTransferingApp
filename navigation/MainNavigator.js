@@ -8,6 +8,7 @@ import loginScreen from "../screens/loginScreen";
 import chooseTypeScreen from "../screens/chooseTypeScreen";
 import CustomerDrawerNavigator from "./CustomerDrawerNavigator";
 import ShopkeeperDrawerNavigator from "./ShopkeeperDrawerNavigator";
+import CustomerAddItemTabNavigator from "./CustomerAddItemTabNavigator";
 
 const Stack = createNativeStackNavigator();
 
@@ -26,6 +27,10 @@ class MainNavigator extends Component {
                      animation: "simple_push",
                   }}
                >
+                  <Stack.Screen
+                     name="tab"
+                     component={CustomerAddItemTabNavigator}
+                  />
                   <Stack.Screen name="login" component={loginScreen} />
                   <Stack.Screen
                      name="chooseType"

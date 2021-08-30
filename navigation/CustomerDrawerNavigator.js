@@ -8,9 +8,12 @@ import {
 } from "@react-navigation/drawer";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { StackActions } from "@react-navigation/native";
+import { Ionicons } from "@expo/vector-icons";
 
 import Colors from "../theme/colors";
 import productListScreen from "../screens/customer/productListScreen";
+import historyScreen from "../screens/customer/historyScreen";
+import scannerScreen from "../screens/customer/scannerScreen";
 
 const Stack = createNativeStackNavigator();
 
@@ -31,6 +34,7 @@ const customerNavigator = () => {
             component={productListScreen}
             initialParams={{}}
          />
+         <Stack.Screen name="scanner" component={scannerScreen} />
       </Stack.Navigator>
    );
 };
@@ -38,10 +42,11 @@ const customerNavigator = () => {
 const Drawer = createDrawerNavigator();
 
 export default function CustomerDrawerNavigator(Props) {
+   let toggleDrawer;
+
    return (
       <Drawer.Navigator
          screenOptions={{
-            headerShown: false,
             swipeEnabled: false,
             drawerActiveTintColor: Colors.textPrimary,
             drawerActiveBackgroundColor: Colors.primary,
@@ -50,47 +55,77 @@ export default function CustomerDrawerNavigator(Props) {
                backgroundColor: Colors.backgroundColor,
             },
             overlayColor: Colors.selected,
+            headerTintColor: Colors.headerTitle,
+
+            headerStyle: {
+               backgroundColor: Colors.headerBgColor,
+            },
+            headerLeft: () => (
+               <TouchableOpacity onPress={() => toggleDrawer()}>
+                  <Ionicons
+                     name="ios-menu"
+                     size={25}
+                     color={Colors.headerTitle}
+                     style={{ marginLeft: 15 }}
+                  />
+               </TouchableOpacity>
+            ),
          }}
-         drawerContent={(props) => (
-            <DrawerContentScrollView {...props}>
-               <View
-                  style={{
-                     backgroundColor: Colors.headerBgColor,
-                     marginTop: -4,
-                     paddingVertical: 30,
-                     paddingLeft: 15,
-                     marginBottom: 10,
-                  }}
-               >
-                  <Text
+         drawerContent={(props) => {
+            toggleDrawer = props.navigation.toggleDrawer;
+            return (
+               <DrawerContentScrollView {...props}>
+                  <View
                      style={{
-                        color: Colors.headerTitle,
-                        fontSize: 23,
-                        lineHeight: 23,
-                        fontWeight: "bold",
+                        backgroundColor: Colors.headerBgColor,
+                        marginTop: -4,
+                        paddingVertical: 30,
+                        paddingLeft: 15,
+                        marginBottom: 10,
                      }}
                   >
-                     Username
-                  </Text>
-                  <Text style={{ color: Colors.headerTitle, lineHeight: 20 }}>
-                     username@gmail.com
-                  </Text>
-               </View>
-               <DrawerItemList {...props} />
-               <DrawerItem
-                  label="Log Out"
-                  onPress={() =>
-                     Props.navigation.dispatch(StackActions.replace("login"))
-                  }
-               />
-            </DrawerContentScrollView>
-         )}
+                     <Text
+                        style={{
+                           color: Colors.headerTitle,
+                           fontSize: 23,
+                           lineHeight: 23,
+                           fontWeight: "bold",
+                        }}
+                     >
+                        {Props.route.params.name}
+                     </Text>
+                     <Text
+                        style={{ color: Colors.headerTitle, lineHeight: 20 }}
+                     >
+                        {Props.route.params.email}
+                     </Text>
+                  </View>
+                  <DrawerItemList {...props} />
+                  <DrawerItem
+                     label="Log Out"
+                     onPress={() =>
+                        Props.navigation.dispatch(StackActions.replace("login"))
+                     }
+                  />
+               </DrawerContentScrollView>
+            );
+         }}
       >
          <Drawer.Screen
             name="stacks"
             component={customerNavigator}
             options={{
                drawerLabel: "Home",
+               swipeEnabled: true,
+               headerShown: false,
+            }}
+         />
+         <Drawer.Screen
+            name="history"
+            component={historyScreen}
+            options={{
+               // drawerLabel: "History",
+               title: "History",
                swipeEnabled: true,
             }}
          />

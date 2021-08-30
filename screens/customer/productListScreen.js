@@ -105,7 +105,7 @@ const productListScreen = (props) => {
             <TouchableOpacity
                activeOpacity={0.6}
                onPress={() => {
-                  // props.navigation.navigate("scanner", { shareList, products });
+                  props.navigation.navigate("scanner", {});
                }}
             >
                <Ionicons
