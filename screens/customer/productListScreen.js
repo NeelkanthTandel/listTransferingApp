@@ -87,11 +87,11 @@ const productListScreen = (props) => {
 
    useEffect(() => {
       props.navigation.setOptions({
-         // title,
+         title: props.route.params.title,
          headerLeft: () => (
             <TouchableOpacity
                activeOpacity={0.6}
-               // onPress={() => props.navigation.goBack()}
+               onPress={() => props.navigation.goBack()}
             >
                <Ionicons
                   name={"ios-arrow-back"}
@@ -200,7 +200,9 @@ const productListScreen = (props) => {
          />
          <PlusButton
             onPress={
-               () => {}
+               () => {
+                  props.navigation.navigate("addProducts");
+               }
                // props.navigation.navigate("addProducts", {
                //    currentList,
                //    list_id: props.route.params._id,

@@ -27,11 +27,7 @@ class MainNavigator extends Component {
                      animation: "simple_push",
                   }}
                >
-                  <Stack.Screen
-                     name="tab"
-                     component={CustomerAddItemTabNavigator}
-                  />
-                  <Stack.Screen name="login" component={loginScreen} />
+                  {/* <Stack.Screen name="login" component={loginScreen} />
                   <Stack.Screen
                      name="chooseType"
                      component={chooseTypeScreen}
@@ -39,10 +35,11 @@ class MainNavigator extends Component {
                   <Stack.Screen
                      name="shopkeeperDrawer"
                      component={ShopkeeperDrawerNavigator}
-                  />
+                  /> */}
                   <Stack.Screen
                      name="customerDrawer"
                      component={CustomerDrawerNavigator}
+                     initialParams={{}}
                   />
                </Stack.Navigator>
             </NavigationContainer>

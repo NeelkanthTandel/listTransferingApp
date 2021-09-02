@@ -14,6 +14,10 @@ import Colors from "../theme/colors";
 import productListScreen from "../screens/customer/productListScreen";
 import historyScreen from "../screens/customer/historyScreen";
 import scannerScreen from "../screens/customer/scannerScreen";
+import homeScreen from "../screens/customer/homeScreen";
+import populerProducts from "../screens/customer/populerProducts";
+import AddItemModal from "../components/addItemModal";
+import CustomerAddItemTabNavigator from "./CustomerAddItemTabNavigator";
 
 const Stack = createNativeStackNavigator();
 
@@ -29,10 +33,20 @@ const customerNavigator = () => {
             animation: "slide_from_right",
          }}
       >
+         <Stack.Screen name="home" component={homeScreen} initialParams={{}} />
+         <Stack.Screen
+            name="popular"
+            component={populerProducts}
+            initialParams={{}}
+         />
          <Stack.Screen
             name="productList"
             component={productListScreen}
             initialParams={{}}
+         />
+         <Stack.Screen
+            name="addProducts"
+            component={CustomerAddItemTabNavigator}
          />
          <Stack.Screen name="scanner" component={scannerScreen} />
       </Stack.Navigator>

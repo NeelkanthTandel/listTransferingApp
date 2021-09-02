@@ -5,13 +5,24 @@ import { createMaterialTopTabNavigator } from "@react-navigation/material-top-ta
 import scannerScreen from "../screens/customer/scannerScreen";
 import historyScreen from "../screens/customer/historyScreen";
 
+import SavedProducts from "../screens/customer/saved";
+import Catagories from "../screens/customer/categories";
+import PopulerProducts from "../screens/customer/populerProducts";
+import colors from "../theme/colors";
+
 const Tab = createMaterialTopTabNavigator();
 
 const CustomerAddItemTabNavigator = () => {
    return (
-      <Tab.Navigator>
-         <Tab.Screen name="Home" component={scannerScreen} />
-         <Tab.Screen name="History" component={historyScreen} />
+      <Tab.Navigator
+         screenOptions={{
+            tabBarLabelStyle: { fontSize: 12 },
+            tabBarStyle: { backgroundColor: colors.primary },
+         }}
+      >
+         <Tab.Screen name="Populer" component={PopulerProducts} />
+         <Tab.Screen name="Catagories" component={Catagories} />
+         <Tab.Screen name="Saved" component={SavedProducts} />
       </Tab.Navigator>
    );
 };
