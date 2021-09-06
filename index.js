@@ -16,7 +16,7 @@ app.use(authRoutes);
 mongoose.connect(mogoUrl, {
    useNewUrlParser: true,
    useUnifiedTopology: true,
-   useCreateIndex: true,
+   // useCreateIndex: true,
 });
 
 mongoose.connection.on("connected", () => {
