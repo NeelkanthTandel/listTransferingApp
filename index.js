@@ -3,7 +3,7 @@ const bodyParser = require("body-parser");
 const mongoose = require("mongoose");
 
 const app = express();
-const PORT = 3000;
+// const PORT = 3000;
 const { mogoUrl } = require("./keys");
 
 require("./models/User");
@@ -33,6 +33,6 @@ app.get("/", requireToken, (req, res) => {
    // res.send("Hello");
 });
 
-app.listen(PORT, '0.0.0.0', () => {
+app.listen(process.env.PORT, () => {
    console.log("server running " + PORT);
 });
