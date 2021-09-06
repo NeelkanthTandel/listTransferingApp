@@ -34,5 +34,5 @@ app.get("/", requireToken, (req, res) => {
 });
 
 app.listen(process.env.PORT, () => {
-   console.log("server running " + PORT);
+   console.log("server running " + process.env.PORT);
 });
