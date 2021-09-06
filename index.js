@@ -33,6 +33,6 @@ app.get("/", requireToken, (req, res) => {
    // res.send("Hello");
 });
 
-// app.listen(PORT, () => {
-//    console.log("server running " + PORT);
-// });
+app.listen(PORT, '0.0.0.0', () => {
+   console.log("server running " + PORT);
+});
