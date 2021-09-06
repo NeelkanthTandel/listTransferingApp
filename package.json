@@ -1,0 +1,15 @@
+{
+  "name": "list-transferring-server",
+  "version": "1.0.0",
+  "description": "server for list transferring app",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://git.heroku.com/list-transferring-app.git"
+  },
+  "author": "Neelkanth Tandel",
+  "license": "ISC"
+}
