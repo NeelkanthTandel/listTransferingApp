@@ -12,5 +12,11 @@
     "url": "https://git.heroku.com/list-transferring-app.git"
   },
   "author": "Neelkanth Tandel",
-  "license": "ISC"
+  "license": "ISC",
+  "dependencies": {
+    "body-parser": "^1.19.0",
+    "express": "^4.17.1",
+    "jsonwebtoken": "^8.5.1",
+    "mongoose": "^6.0.4"
+  }
 }
