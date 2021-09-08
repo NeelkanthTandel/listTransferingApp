@@ -14,7 +14,7 @@ module.exports = (req, res, next) => {
    const token = authorization.replace("Bearer ", "");
    jwt.verify(token, jwtkey, async (err, payload) => {
       if (err) {
-         return res.status(401).send({ error: "you must be logged in 2" });
+         return res.status(401).send({ error: "you must be logged in" });
       }
       const { userId } = payload;
       console.log(userId);
@@ -26,8 +26,12 @@ module.exports = (req, res, next) => {
          if (!shopkeeper) {
             return res.status(401).send({ error: "Account must be deleted" });
          }
+         req.isShopkeeper = true;
          req.user = shopkeeper;
-      } else req.user = customer;
+      } else {
+         req.isShopkeeper = false;
+         req.user = customer;
+      }
       next();
    });
 };

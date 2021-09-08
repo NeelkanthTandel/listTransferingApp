@@ -29,10 +29,16 @@ mongoose.connection.on("error", (err) => {
 
 app.get("/", requireToken, (req, res) => {
    console.log("get/");
-   res.send({ email: req.user._id });
+   if (req.isShopkeeper) {
+      res.send({
+         email: req.user.email,
+         name: req.user.name,
+         shop_name: req.user.shop_name,
+      });
+   } else res.send({ email: req.user.email, name: req.user.name });
    // res.send("Hello");
 });
 
-app.listen(process.env.PORT,'0.0.0.0', () => {
+app.listen(process.env.PORT, "0.0.0.0", () => {
    console.log("server running " + process.env.PORT);
 });
