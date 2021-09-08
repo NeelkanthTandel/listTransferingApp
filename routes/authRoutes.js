@@ -19,7 +19,7 @@ router.post("/signIn", async (req, res) => {
 
    if (!customer) {
       const shopkeeper = await shopkeeper_detail.findOne({ email });
-
+      console.log(shopkeeper);
       if (!shopkeeper) {
          return res.send({ registered: false });
       }
