@@ -19,13 +19,17 @@ router.post("/signIn", async (req, res) => {
 
    if (!customer) {
       const shopkeeper = await shopkeeper_detail.findOne({ email });
-      console.log(shopkeeper);
       if (!shopkeeper) {
          return res.send({ registered: false });
       }
 
       const token = jwt.sign({ userId: shopkeeper._id }, jwtkey);
-      return res.send({ token, registered: true, isShopkeeper: true });
+      return res.send({
+         token,
+         registered: true,
+         isShopkeeper: true,
+         shopName: shopkeeper.shop_name,
+      });
    }
 
    const token = jwt.sign({ userId: customer._id }, jwtkey);
