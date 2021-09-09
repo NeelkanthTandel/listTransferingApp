@@ -2,7 +2,9 @@ import React from "react";
 import { StyleSheet, Text, View, TouchableOpacity, Image } from "react-native";
 import * as Google from "expo-google-app-auth";
 import { StackActions } from "@react-navigation/native";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
+import { API_URL } from "../keys";
 import Colors from "../theme/colors";
 
 const loginScreen = (props) => {
@@ -16,12 +18,48 @@ const loginScreen = (props) => {
 
          if (result.type === "success") {
             console.log(result.user);
-            props.navigation.dispatch(
-               StackActions.replace("chooseType", {
-                  email: result.user.email,
-                  name: result.user.name,
-               })
-            );
+            try {
+               const response = await fetch(`${API_URL}/signIn`, {
+                  method: "POST",
+                  headers: {
+                     "Content-Type": "application/json",
+                  },
+                  body: JSON.stringify({
+                     email: result.user.email,
+                  }),
+               });
+               const data = await response.json();
+               console.log("user data:", data);
+               if (!data.registered) {
+                  props.navigation.dispatch(
+                     StackActions.replace("chooseType", {
+                        email: result.user.email,
+                        name: result.user.name,
+                     })
+                  );
+               } else {
+                  if (data.isShopkeeper) {
+                     AsyncStorage.setItem("token", data.token);
+                     props.navigation.dispatch(
+                        StackActions.replace("shopkeeperDrawer", {
+                           email: result.user.email,
+                           name: result.user.name,
+                           shopName: data.shopName,
+                        })
+                     );
+                  } else {
+                     AsyncStorage.setItem("token", data.token);
+                     props.navigation.dispatch(
+                        StackActions.replace("customerDrawer", {
+                           email: result.user.email,
+                           name: result.user.name,
+                        })
+                     );
+                  }
+               }
+            } catch (err) {
+               console.log("login error", err);
+            }
          } else {
             return { cancelled: true };
          }

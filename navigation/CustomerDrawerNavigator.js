@@ -9,6 +9,7 @@ import {
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { StackActions } from "@react-navigation/native";
 import { Ionicons } from "@expo/vector-icons";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 import Colors from "../theme/colors";
 import productListScreen from "../screens/customer/productListScreen";
@@ -117,9 +118,12 @@ export default function CustomerDrawerNavigator(Props) {
                   <DrawerItemList {...props} />
                   <DrawerItem
                      label="Log Out"
-                     onPress={() =>
-                        Props.navigation.dispatch(StackActions.replace("login"))
-                     }
+                     onPress={async () => {
+                        await AsyncStorage.removeItem("token");
+                        Props.navigation.dispatch(
+                           StackActions.replace("login")
+                        );
+                     }}
                   />
                </DrawerContentScrollView>
             );

@@ -10,12 +10,77 @@ import {
    Alert,
 } from "react-native";
 import { StackActions } from "@react-navigation/native";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
+import { API_URL } from "../keys";
 import Colors from "../theme/colors";
 
 const ChooseTypeScreen = (props) => {
    const [isShopkeeper, setIsShopkeeper] = useState(false);
    const [shopName, setShopName] = useState("");
+
+   const finishHandler = async () => {
+      if (!isShopkeeper) {
+         try {
+            const response = await fetch(`${API_URL}/customerSignUp`, {
+               method: "POST",
+               headers: {
+                  "Content-Type": "application/json",
+               },
+               body: JSON.stringify({
+                  email: props.route.params.email,
+                  name: props.route.params.name,
+               }),
+            });
+            const data = await response.json();
+            console.log("user data:", data);
+            if (data.token) {
+               AsyncStorage.setItem("token", data.token);
+               props.navigation.dispatch(
+                  StackActions.replace("customerDrawer", {
+                     email: props.route.params.email,
+                     name: props.route.params.name,
+                  })
+               );
+            }
+         } catch (err) {
+            console.log("customer signup error", err);
+         }
+      } else {
+         if (isShopkeeper && shopName) {
+            try {
+               const response = await fetch(`${API_URL}/shopkeeperSignUp`, {
+                  method: "POST",
+                  headers: {
+                     "Content-Type": "application/json",
+                  },
+                  body: JSON.stringify({
+                     email: props.route.params.email,
+                     name: props.route.params.name,
+                     shop_name: shopName,
+                  }),
+               });
+               const data = await response.json();
+               console.log("user data:", data);
+               if (data.token) {
+                  AsyncStorage.setItem("token", data.token);
+                  props.navigation.dispatch(
+                     StackActions.replace("shopkeeperDrawer", {
+                        shopName,
+                        email: props.route.params.email,
+                        name: props.route.params.name,
+                     })
+                  );
+               }
+            } catch (err) {
+               console.log("shopkeeper signup error", err);
+            }
+         } else if (!shopName && isShopkeeper) {
+            Alert.alert("Message", "Please enter shop name");
+         }
+      }
+   };
+
    return (
       <KeyboardAvoidingView
          behavior="height"
@@ -68,26 +133,7 @@ const ChooseTypeScreen = (props) => {
          <TouchableOpacity
             style={styles.Finish}
             activeOpacity={0.6}
-            onPress={() =>
-               !isShopkeeper
-                  ? props.navigation.dispatch(
-                       StackActions.replace("customerDrawer", {
-                          email: props.route.params.email,
-                          name: props.route.params.name,
-                       })
-                    )
-                  : isShopkeeper && shopName
-                  ? props.navigation.dispatch(
-                       StackActions.replace("shopkeeperDrawer", {
-                          shopName,
-                          email: props.route.params.email,
-                          name: props.route.params.name,
-                       })
-                    )
-                  : !shopName && isShopkeeper
-                  ? Alert.alert("Message", "Please enter shop name")
-                  : null
-            }
+            onPress={finishHandler}
          >
             <Text style={styles.FinishText}>Finish</Text>
          </TouchableOpacity>
