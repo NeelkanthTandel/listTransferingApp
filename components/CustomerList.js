@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { StyleSheet, View, Text, TouchableOpacity } from "react-native";
 import OptionsMenu from "react-native-option-menu";
 
-import { apiURL } from "../keys";
+import { API_URL } from "../keys";
 import Colors from "../theme/colors";
 import { Ionicons } from "@expo/vector-icons";
 
@@ -36,7 +36,7 @@ const CustomerList = (props) => {
 
    const deleteHandler = async () => {
       try {
-         const response = await fetch(`${apiURL}/deleteCustomerList`, {
+         const response = await fetch(`${API_URL}/deleteCustomerList`, {
             method: "POST",
             headers: {
                "Content-Type": "application/json",
