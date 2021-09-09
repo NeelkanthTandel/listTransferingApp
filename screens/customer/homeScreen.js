@@ -4,30 +4,49 @@ import {
    View,
    Text,
    TouchableOpacity,
-   ToastAndroid,
+   FlatList,
 } from "react-native";
-import { useIsFocused } from "@react-navigation/native";
 
 import Colors from "../../theme/colors";
-import MyList from "./MyList";
-import PlusButton from "../../components/PlusButton";
+import CustomerLists from "../../components/CustomerList";
 import { Ionicons } from "@expo/vector-icons";
+import PlusButton from "../../components/PlusButton";
+import { apiURL } from "../../keys";
+import CreateListModal from "../../components/CreateListModal";
 
 const homeScreen = (props) => {
    const [selected, setSelected] = useState(false);
+   const [pressedDelete, setPressedDelete] = useState(false);
    const [isSelectAll, setIsSelectAll] = useState(-1);
-   const isFocused = useIsFocused();
-   useEffect(() => {
-      console.log(props.route.params?.isDone);
-      if (props.route.params?.isDone && isFocused) {
-         console.log("Done");
-         ToastAndroid.show(
-            "Done with " + props.route.params.listName,
-            ToastAndroid.SHORT
-         );
-         props.navigation.setParams({ isDone: false, listName: "" });
+   const [isModalVisible, setIsModalVisible] = useState(false);
+   const [refresh, setRefresh] = useState(true);
+   const [myLists, setMyLists] = useState([]);
+   const token =
+      "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2MTEwZWEwMTQyZmI4NTIyN2M4YTFlYTYiLCJpYXQiOjE2Mjg1MTM0MDN9.WcXw8ToMwXB1CGH30ECEFkWamhno5l5JAXspADvxxHo";
+
+   const fetchList = async () => {
+      try {
+         const response = await fetch(`${apiURL}/fetchCustomerLists`, {
+            method: "Get",
+            headers: {
+               "Content-Type": "application/json",
+               authorization: "Bearer " + token,
+            },
+         });
+         const data = await response.json();
+         setMyLists(data);
+      } catch (err) {
+         console.log("fetch list error:", err);
       }
-   }, [isFocused]);
+      setRefresh(false);
+   };
+
+   useEffect(() => {
+      if (refresh) {
+         console.log("fetchingList");
+         fetchList();
+      }
+   }, [refresh]);
    useEffect(() => {
       if (selected) {
          props.navigation.setOptions({
@@ -35,18 +54,19 @@ const homeScreen = (props) => {
             headerStyle: {
                backgroundColor: Colors.secondary,
             },
+            headerTitleAlign: "center",
             headerLeft: () => (
                <TouchableOpacity onPress={() => setIsSelectAll(0)}>
                   <Ionicons
                      name="close-sharp"
-                     size={23}
+                     size={26}
                      color={Colors.headerTitle}
                   />
                </TouchableOpacity>
             ),
             headerRight: () => (
                <View style={{ flexDirection: "row" }}>
-                  <TouchableOpacity onPress={() => {}}>
+                  <TouchableOpacity onPress={() => setPressedDelete(true)}>
                      <Text
                         style={{
                            fontSize: 16,
@@ -83,7 +103,7 @@ const homeScreen = (props) => {
                >
                   <Ionicons
                      name="ios-menu"
-                     size={25}
+                     size={26}
                      color={Colors.headerTitle}
                      style={{ marginRight: 15 }}
                   />
@@ -93,64 +113,55 @@ const homeScreen = (props) => {
          });
       }
    }, [selected]);
+
    return (
       <View style={styles.screen}>
-         <Text style={styles.title}>My List</Text>
-         <Text
-            style={{
-               fontSize: 12,
-               color: Colors.textSecondary,
-               marginBottom: 20,
-            }}
-         >
-            Tap on list to open
-         </Text>
+         <View style={styles.titleContainer}>
+            <Text style={styles.title}>My List</Text>
+            <TouchableOpacity
+               onPress={() => setRefresh(true)}
+               activeOpacity={0.6}
+            >
+               <Ionicons name="ios-refresh-sharp" size={23} />
+            </TouchableOpacity>
+         </View>
 
-         <MyList
-            style={styles.myList}
-            setSelected={setSelected}
-            setIsSelectAll={setIsSelectAll}
-            selected={selected}
-            isSelectAll={isSelectAll}
-            title="List 1"
-            navigation={props.navigation}
-         />
-         <MyList
-            style={styles.myList}
-            setSelected={setSelected}
-            setIsSelectAll={setIsSelectAll}
-            selected={selected}
-            isSelectAll={isSelectAll}
-            title="List 2"
-            navigation={props.navigation}
-         />
-         <MyList
-            style={styles.myList}
-            setSelected={setSelected}
-            setIsSelectAll={setIsSelectAll}
-            selected={selected}
-            isSelectAll={isSelectAll}
-            title="List 3"
-            navigation={props.navigation}
-         />
-         <MyList
-            style={styles.myList}
-            setSelected={setSelected}
-            setIsSelectAll={setIsSelectAll}
-            selected={selected}
-            isSelectAll={isSelectAll}
-            title="List 2"
-            navigation={props.navigation}
-         />
-         <PlusButton
-            onPress={
-               () => {}
-               // props.navigation.navigate("addProducts", {
-               //    currentList,
-               //    list_id: props.route.params._id,
-               //    token: props.route.params.token,
-               // })
-            }
+         <View style={{ flex: 1 }}>
+            <FlatList
+               data={myLists}
+               showsVerticalScrollIndicator={false}
+               renderItem={(itemData) => {
+                  return (
+                     <>
+                        <CustomerLists
+                           style={styles.customerLists}
+                           setSelected={setSelected}
+                           setIsSelectAll={setIsSelectAll}
+                           selected={selected}
+                           isSelectAll={isSelectAll}
+                           list={itemData.item}
+                           setRefresh={setRefresh}
+                           pressedDelete={pressedDelete}
+                           setPressedDelete={setPressedDelete}
+                           navigation={props.navigation}
+                           token={token}
+                        />
+                     </>
+                  );
+               }}
+               keyExtractor={(item) => item._id}
+               refreshing={refresh}
+               onRefresh={() => setRefresh(true)}
+               ListEmptyComponent={<Text>No list found</Text>}
+            />
+         </View>
+         <PlusButton onPress={() => setIsModalVisible(true)} />
+         <CreateListModal
+            headerTitle="Create List"
+            buttonName="Create"
+            setIsModalVisible={setIsModalVisible}
+            setRefresh={setRefresh}
+            isModalVisible={isModalVisible}
          />
       </View>
    );
@@ -161,16 +172,21 @@ const homeScreen = (props) => {
 const styles = StyleSheet.create({
    screen: {
       flex: 1,
-      paddingVertical: 30,
+      paddingTop: 30,
       paddingHorizontal: 20,
       backgroundColor: Colors.backgroundColor,
+   },
+   titleContainer: {
+      marginBottom: 30,
+      flexDirection: "row",
+      justifyContent: "space-between",
    },
    title: {
       fontSize: 18,
       color: Colors.textPrimary,
       fontWeight: "bold",
    },
-   myList: {
+   customerLists: {
       marginBottom: 20,
       // backgroundColor: Colors.selected,
    },
