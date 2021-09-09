@@ -34,8 +34,14 @@ app.get("/", requireToken, (req, res) => {
          email: req.user.email,
          name: req.user.name,
          shop_name: req.user.shop_name,
+         isShopkeeper: true,
       });
-   } else res.send({ email: req.user.email, name: req.user.name });
+   } else
+      res.send({
+         email: req.user.email,
+         name: req.user.name,
+         isShopkeeper: false,
+      });
    // res.send("Hello");
 });
 
