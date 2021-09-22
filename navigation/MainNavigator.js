@@ -47,6 +47,7 @@ const MainNavigator = () => {
                setInitialParams({
                   email: data.email,
                   name: data.name,
+                  token,
                });
                console.log(initialParams);
             }
@@ -63,8 +64,6 @@ const MainNavigator = () => {
       console.log("Running");
       isSignedIn();
    }, []);
-
-   const StackDecider = () => {};
 
    return (
       <>

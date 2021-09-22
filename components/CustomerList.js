@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { StyleSheet, View, Text, TouchableOpacity } from "react-native";
 import OptionsMenu from "react-native-option-menu";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 import { API_URL } from "../keys";
 import Colors from "../theme/colors";
@@ -8,6 +9,7 @@ import { Ionicons } from "@expo/vector-icons";
 
 const CustomerList = (props) => {
    const [selected, setSelected] = useState(false);
+   const { token } = props;
 
    useEffect(() => {
       console.log(props.isSelectAll);
@@ -20,6 +22,7 @@ const CustomerList = (props) => {
          // props.setIsSelectAll(false);
       }
    }, [props.isSelectAll]);
+
    useEffect(() => {
       if (selected && props.isSelectAll != 0) {
          console.log(true);
@@ -34,13 +37,19 @@ const CustomerList = (props) => {
       }
    });
 
+   useEffect(() => {
+      async () => {
+         token = await AsyncStorage.getItem("token");
+      };
+   }, []);
+
    const deleteHandler = async () => {
       try {
          const response = await fetch(`${API_URL}/deleteCustomerList`, {
             method: "POST",
             headers: {
                "Content-Type": "application/json",
-               authorization: "Bearer " + props.token,
+               authorization: "Bearer " + token,
             },
             body: JSON.stringify({
                _id: props.list._id,
@@ -98,7 +107,7 @@ const CustomerList = (props) => {
                   _id: props.list._id,
                   list_name: props.list.list_name,
                   products: props.list.products,
-                  token: props.token,
+                  token,
                });
             }
          }}

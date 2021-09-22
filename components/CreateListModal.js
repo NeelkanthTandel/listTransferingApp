@@ -4,13 +4,14 @@ import { StyleSheet } from "react-native";
 import Colors from "../theme/colors";
 import { API_URL } from "../keys";
 import TextInputModal from "./TextInputModal";
-const token =
-   "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2MTEwZWEwMTQyZmI4NTIyN2M4YTFlYTYiLCJpYXQiOjE2Mjg1MTM0MDN9.WcXw8ToMwXB1CGH30ECEFkWamhno5l5JAXspADvxxHo";
 
 const CreateListModal = (props) => {
+   const { token } = props;
+
    const createList = async (name) => {
       console.log("name:", name);
       try {
+         console.log("token:", token);
          const response = await fetch(`${API_URL}/createCustomerList`, {
             method: "POST",
             headers: {

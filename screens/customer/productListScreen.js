@@ -9,7 +9,7 @@ import {
 import { Ionicons } from "@expo/vector-icons";
 import { useIsFocused } from "@react-navigation/core";
 
-// import { apiURL } from "../../keys";
+import { API_URL } from "../../keys";
 import Colors from "../../theme/colors";
 import PlusButton from "../../components/PlusButton";
 
@@ -23,71 +23,70 @@ const productListScreen = (props) => {
    const [isShare, setIsShare] = useState(false);
    let productIds;
    const [refresh, setRefresh] = useState(false);
-   // console.log();
-   // const title =
-   //    props.route.params.list_name.length > 20
-   //       ? props.route.params.list_name.substring(0, 20) + "..."
-   //       : props.route.params.list_name; //to truncat title if it's bigger than 20 character
+   const title =
+      props.route.params.list_name.length > 20
+         ? props.route.params.list_name.substring(0, 20) + "..."
+         : props.route.params.list_name; //to truncat title if it's bigger than 20 character
 
-   // const fetchList = async () => {
-   //    setProducts();
-   //    try {
-   //       const response = await fetch(`${apiURL}/fetchList`, {
-   //          method: "POST",
-   //          headers: {
-   //             "Content-Type": "application/json",
-   //             authorization: "Bearer " + props.route.params.token,
-   //          },
-   //          body: JSON.stringify({
-   //             _id: props.route.params._id,
-   //          }),
-   //       });
-   //       const data = await response.json();
-   //       // console.log("fetched list:", data);
-   //       setCurrentList(data);
-   //       productIds = data.products.map((data) => data.product_id);
-   //       return await fetchProducts();
-   //    } catch (err) {
-   //       console.log("fetch list error:", err);
-   //    }
-   // }; //function to fetch list of customer containing product id and quantity
-   // const fetchProducts = async () => {
-   //    try {
-   //       const response = await fetch(`${apiURL}/fetchProduct`, {
-   //          method: "POST",
-   //          headers: {
-   //             "Content-Type": "application/json",
-   //          },
-   //          body: JSON.stringify({
-   //             ids: productIds,
-   //          }),
-   //       });
-   //       const data = await response.json();
-   //       // console.log("prod:", data);
-   //       await setProducts(data);
-   //    } catch (err) {
-   //       console.log(err.message);
-   //    }
-   //    setRefresh(false);
-   // }; //function to fetch products name from productsIds
+   const fetchList = async () => {
+      setProducts();
+      try {
+         const response = await fetch(`${API_URL}/fetchList`, {
+            method: "POST",
+            headers: {
+               "Content-Type": "application/json",
+               authorization: "Bearer " + props.route.params.token,
+            },
+            body: JSON.stringify({
+               _id: props.route.params._id,
+            }),
+         });
+         const data = await response.json();
+         console.log("fetched list:", data);
+         setCurrentList(data);
+         productIds = data.products.map((data) => data.product_id);
+         return await fetchProducts();
+      } catch (err) {
+         console.log("fetch list error:", err);
+      }
+   }; //function to fetch list of customer containing product id and quantity
+   const fetchProducts = async () => {
+      try {
+         const response = await fetch(`${API_URL}/fetchProduct`, {
+            method: "POST",
+            headers: {
+               "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+               ids: productIds,
+            }),
+         });
+         const data = await response.json();
+         // console.log("prod:", data);
+         await setProducts(data);
+      } catch (err) {
+         console.log(err.message);
+      }
+      setRefresh(false);
+   }; //function to fetch products name from productsIds
 
-   // useEffect(() => {
-   //    if (isFocused) {
-   //       setRefresh(true);
-   //    }
-   // }, [isFocused]); //to refresh list when we come back from child screen
+   useEffect(() => {
+      if (isFocused) {
+         setRefresh(true);
+      }
+   }, [isFocused]); //to refresh list when we come back from child screen
 
-   // useEffect(() => {
-   //    if (refresh) {
-   //       console.log("fetching:", isFocused, refresh);
-   //       fetchList();
-   //       // fetchProducts();
-   //    }
-   // }, [refresh]); //to refresh list when refresh var is true i.e. when list is pulled down
+   useEffect(() => {
+      if (refresh) {
+         console.log("fetching:", isFocused, refresh);
+         fetchList();
+         // fetchProducts();
+      }
+   }, [refresh]); //to refresh list when refresh var is true i.e. when list is pulled down
 
    useEffect(() => {
       props.navigation.setOptions({
-         title: props.route.params.title,
+         title,
          headerLeft: () => (
             <TouchableOpacity
                activeOpacity={0.6}
@@ -121,7 +120,7 @@ const productListScreen = (props) => {
    const deleteProduct = async (id) => {
       // setProducts();
       try {
-         const response = await fetch(`${apiURL}/deleteProduct`, {
+         const response = await fetch(`${API_URL}/deleteProduct`, {
             method: "POST",
             headers: {
                "Content-Type": "application/json",
@@ -143,7 +142,7 @@ const productListScreen = (props) => {
    const shareList = async (shop_id) => {
       console.log("shop id:", props.route.params.token);
       try {
-         const response = await fetch(`http://192.168.155.213:3000/shareList`, {
+         const response = await fetch(`${API_URL}/shareList`, {
             method: "POST",
             headers: {
                "Content-Type": "application/json",
@@ -199,16 +198,13 @@ const productListScreen = (props) => {
             ListEmptyComponent={<Text>No item found</Text>}
          />
          <PlusButton
-            onPress={
-               () => {
-                  props.navigation.navigate("addProducts");
-               }
-               // props.navigation.navigate("addProducts", {
-               //    currentList,
-               //    list_id: props.route.params._id,
-               //    token: props.route.params.token,
-               // })
-            }
+            onPress={() => {
+               props.navigation.navigate("addProducts", {
+                  currentList,
+                  list_id: props.route.params._id,
+                  token: props.route.params.token,
+               });
+            }}
          />
       </View>
    );

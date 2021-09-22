@@ -13,16 +13,17 @@ const Stack = createNativeStackNavigator();
 
 const categoryStack = () => {
    return (
-      <Stack.Navigator screenOptions={{headerShown: false}} >
+      <Stack.Navigator screenOptions={{ headerShown: false }}>
          <Stack.Screen name="categories" component={Catagories} />
          <Stack.Screen name="categoryProducts" component={categoryProducts} />
       </Stack.Navigator>
-   )
-}
+   );
+};
 
 const Tab = createMaterialTopTabNavigator();
 
-const CustomerAddItemTabNavigator = () => {
+const CustomerAddItemTabNavigator = (props) => {
+   console.log(props);
    return (
       <Tab.Navigator
          screenOptions={{
@@ -31,7 +32,11 @@ const CustomerAddItemTabNavigator = () => {
          }}
       >
          <Tab.Screen name="Populer" component={PopulerProducts} />
-         <Tab.Screen name="categoryStack" component={categoryStack} options={{title:"Category"}} />
+         <Tab.Screen
+            name="categoryStack"
+            component={categoryStack}
+            options={{ title: "Category" }}
+         />
          <Tab.Screen name="Saved" component={SavedProducts} />
       </Tab.Navigator>
    );

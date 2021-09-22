@@ -22,7 +22,7 @@ import CustomerAddItemTabNavigator from "./CustomerAddItemTabNavigator";
 
 const Stack = createNativeStackNavigator();
 
-const customerNavigator = () => {
+const customerNavigator = (props) => {
    return (
       <Stack.Navigator
          screenOptions={{
@@ -34,7 +34,11 @@ const customerNavigator = () => {
             animation: "slide_from_right",
          }}
       >
-         <Stack.Screen name="home" component={homeScreen} initialParams={{}} />
+         <Stack.Screen
+            name="home"
+            component={homeScreen}
+            initialParams={{ token: props.route.params.token }}
+         />
          <Stack.Screen
             name="popular"
             component={populerProducts}
@@ -136,6 +140,9 @@ export default function CustomerDrawerNavigator(Props) {
                drawerLabel: "Home",
                swipeEnabled: true,
                headerShown: false,
+            }}
+            initialParams={{
+               token: Props.route.params.token,
             }}
          />
          <Drawer.Screen

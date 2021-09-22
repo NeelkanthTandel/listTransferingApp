@@ -6,27 +6,28 @@ import {
    TouchableOpacity,
    FlatList,
 } from "react-native";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 import Colors from "../../theme/colors";
-import CustomerLists from "../../components/CustomerList";
+import CustomerList from "../../components/CustomerList";
 import { Ionicons } from "@expo/vector-icons";
 import PlusButton from "../../components/PlusButton";
-import { apiURL } from "../../keys";
+import { API_URL } from "../../keys";
 import CreateListModal from "../../components/CreateListModal";
 
 const homeScreen = (props) => {
+   // console.log();
    const [selected, setSelected] = useState(false);
    const [pressedDelete, setPressedDelete] = useState(false);
    const [isSelectAll, setIsSelectAll] = useState(-1);
    const [isModalVisible, setIsModalVisible] = useState(false);
    const [refresh, setRefresh] = useState(true);
    const [myLists, setMyLists] = useState([]);
-   const token =
-      "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2MTEwZWEwMTQyZmI4NTIyN2M4YTFlYTYiLCJpYXQiOjE2Mjg1MTM0MDN9.WcXw8ToMwXB1CGH30ECEFkWamhno5l5JAXspADvxxHo";
+   const { token } = props.route.params;
 
    const fetchList = async () => {
       try {
-         const response = await fetch(`${apiURL}/fetchCustomerLists`, {
+         const response = await fetch(`${API_URL}/fetchCustomerLists`, {
             method: "Get",
             headers: {
                "Content-Type": "application/json",
@@ -133,7 +134,7 @@ const homeScreen = (props) => {
                renderItem={(itemData) => {
                   return (
                      <>
-                        <CustomerLists
+                        <CustomerList
                            style={styles.customerLists}
                            setSelected={setSelected}
                            setIsSelectAll={setIsSelectAll}
@@ -162,6 +163,7 @@ const homeScreen = (props) => {
             setIsModalVisible={setIsModalVisible}
             setRefresh={setRefresh}
             isModalVisible={isModalVisible}
+            token={token}
          />
       </View>
    );
