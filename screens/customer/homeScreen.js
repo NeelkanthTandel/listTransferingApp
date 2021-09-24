@@ -23,15 +23,19 @@ const homeScreen = (props) => {
    const [isModalVisible, setIsModalVisible] = useState(false);
    const [refresh, setRefresh] = useState(true);
    const [myLists, setMyLists] = useState([]);
-   const { token } = props.route.params;
+   // const { token } = props.route.params;
+   const [token, setToken] = useState("");
 
    const fetchList = async () => {
+      const tokenIn = await AsyncStorage.getItem("token");
+      setToken(tokenIn);
+
       try {
          const response = await fetch(`${API_URL}/fetchCustomerLists`, {
             method: "Get",
             headers: {
                "Content-Type": "application/json",
-               authorization: "Bearer " + token,
+               authorization: "Bearer " + tokenIn,
             },
          });
          const data = await response.json();
