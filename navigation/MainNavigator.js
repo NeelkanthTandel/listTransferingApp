@@ -22,6 +22,11 @@ const MainNavigator = () => {
 
    const isSignedIn = async () => {
       const token = await AsyncStorage.getItem("token");
+      if (!token) {
+         console.log("No Token");
+         setScreen("login");
+         return setIsCheck(true);
+      }
       console.log("Token: ", token);
       try {
          const response = await fetch(`${API_URL}/`, {
