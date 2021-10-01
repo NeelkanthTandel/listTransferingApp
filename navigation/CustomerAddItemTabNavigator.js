@@ -23,7 +23,7 @@ const categoryStack = () => {
 const Tab = createMaterialTopTabNavigator();
 
 const CustomerAddItemTabNavigator = (props) => {
-   console.log(props);
+   console.log("list:", props.route.params.currentList);
    return (
       <Tab.Navigator
          screenOptions={{
@@ -31,7 +31,14 @@ const CustomerAddItemTabNavigator = (props) => {
             tabBarStyle: { backgroundColor: colors.primary },
          }}
       >
-         <Tab.Screen name="Populer" component={PopulerProducts} />
+         <Tab.Screen
+            name="Populer"
+            component={PopulerProducts}
+            initialParams={{
+               currentList: props.route.params.currentList,
+               drawerProps: props,
+            }}
+         />
          <Tab.Screen
             name="categoryStack"
             component={categoryStack}

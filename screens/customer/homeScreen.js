@@ -98,10 +98,11 @@ const homeScreen = (props) => {
          });
       } else {
          props.navigation.setOptions({
-            title: "App Name",
+            title: "LetMe",
             headerStyle: {
                backgroundColor: Colors.headerBgColor,
             },
+            headerTitleAlign: "center",
             headerLeft: () => (
                <TouchableOpacity
                   onPress={() => props.navigation.toggleDrawer()}

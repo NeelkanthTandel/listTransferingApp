@@ -70,7 +70,7 @@ const loginScreen = (props) => {
 
    return (
       <View style={styles.screen}>
-         <Text style={styles.text}>App Name</Text>
+         <Text style={styles.text}>LetMe</Text>
          <View style={styles.box}>
             <Text style={styles.Text}>Register / Sign In</Text>
             <TouchableOpacity
@@ -102,8 +102,9 @@ const styles = StyleSheet.create({
    text: {
       marginTop: "60%",
       textAlign: "center",
-      fontSize: 23,
+      fontSize: 30,
       fontWeight: "bold",
+      color: Colors.textPrimary,
    },
    box: {
       width: "100%",
