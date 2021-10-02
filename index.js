@@ -9,7 +9,7 @@ const { mogoUrl } = require("./keys");
 require("./models/User");
 const requireToken = require("./middleware/requireToken");
 const authRoutes = require("./routes/authRoutes");
-app.use(bodyParser.json());
+// app.use(bodyParser.json());
 
 app.use(authRoutes);
 
