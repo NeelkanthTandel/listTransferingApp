@@ -11,7 +11,7 @@ const shopkeeper_list = mongoose.model("shopkeeper_list");
 const product = mongoose.model("product");
 
 router.post("/signIn", async (req, res) => {
-   const { email } = req.body;
+   const { email } = req.body; // ==> const Name = req.body.email;
    if (!email) {
       return res.status(422).send({ error: "must provide email or password" });
    }
@@ -19,11 +19,13 @@ router.post("/signIn", async (req, res) => {
 
    if (!customer) {
       const shopkeeper = await shopkeeper_detail.findOne({ email });
+
       if (!shopkeeper) {
          return res.send({ registered: false });
       }
 
       const token = jwt.sign({ userId: shopkeeper._id }, jwtkey);
+
       return res.send({
          token,
          registered: true,
@@ -181,6 +183,16 @@ router.post("/fetchProduct", async (req, res) => {
 router.get("/fetchPopularProduct", async (req, res) => {
    try {
       const prod = await product.find({ popular: true });
+      res.send(prod);
+   } catch (err) {
+      console.log(err.message);
+   }
+});
+
+router.get("/fetchProducts", async (req, res) => {
+   try {
+      const prod = await product.find();
+      console.log("products: ", prod);
       res.send(prod);
    } catch (err) {
       console.log(err.message);
