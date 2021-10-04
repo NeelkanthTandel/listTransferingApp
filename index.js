@@ -3,13 +3,13 @@ const bodyParser = require("body-parser");
 const mongoose = require("mongoose");
 
 const app = express();
-// const PORT = 3030;
+const PORT = process.env.PORT || 3030;
 const { mogoUrl } = require("./keys");
 
 require("./models/User");
 const requireToken = require("./middleware/requireToken");
 const authRoutes = require("./routes/authRoutes");
-// app.use(bodyParser.json());
+app.use(bodyParser.json());
 
 app.use(authRoutes);
 
@@ -45,6 +45,6 @@ app.get("/", requireToken, (req, res) => {
    // res.send("Hello");
 });
 
-app.listen(process.env.PORT, "0.0.0.0", () => {
-   console.log("server running " + process.env.PORT);
+app.listen(PORT, "0.0.0.0", () => {
+   console.log("server running " + PORT);
 });
