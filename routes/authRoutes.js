@@ -221,7 +221,7 @@ router.post("/deleteProduct", requireToken, async (req, res) => {
 
 router.post("/shareList", requireToken, async (req, res) => {
    const customer_id = req.user._id;
-   const { shop_id, products, customer_name } = req.body;
+   const { shop_id, products, customer_name, list_name } = req.body;
 
    try {
       const list = new shopkeeper_list({
@@ -229,6 +229,7 @@ router.post("/shareList", requireToken, async (req, res) => {
          customer_id,
          products,
          customer_name,
+         list_name,
       });
       await list.save();
       return res.send(list._id);

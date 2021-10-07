@@ -71,6 +71,10 @@ const shopkeeperListSchema = new mongoose.Schema({
       type: String,
       required: true,
    },
+   list_name: {
+      type: String,
+      required: true,
+   },
    is_done: {
       //if true, need to fetch that list in history and else in homeScreen
       type: Boolean,
