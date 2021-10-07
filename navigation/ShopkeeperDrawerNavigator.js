@@ -19,7 +19,7 @@ import customerListScreen from "../screens/shopkeeper/customerListScreen";
 
 const Stack = createNativeStackNavigator();
 
-const shopkeeperNavigator = () => {
+const shopkeeperNavigator = (props) => {
    return (
       <Stack.Navigator
          screenOptions={{
@@ -31,7 +31,14 @@ const shopkeeperNavigator = () => {
             animation: "slide_from_right",
          }}
       >
-         <Stack.Screen name="home" component={homeScreen} />
+         <Stack.Screen
+            name="home"
+            component={homeScreen}
+            initialParams={{
+               token: props.route.params.token,
+               name: props.route.params.name,
+            }}
+         />
          <Stack.Screen name="customerList" component={customerListScreen} />
       </Stack.Navigator>
    );
@@ -41,7 +48,7 @@ const Drawer = createDrawerNavigator();
 
 export default function ShopkeeperDrawerNavigator(Props) {
    let toggleDrawer;
-   console.log(Props);
+   // console.log(Props);
    return (
       <Drawer.Navigator
          screenOptions={{
@@ -124,6 +131,10 @@ export default function ShopkeeperDrawerNavigator(Props) {
                drawerLabel: "Home",
                swipeEnabled: true,
                headerShown: false,
+            }}
+            initialParams={{
+               token: Props.route.params.token,
+               name: Props.route.params.name,
             }}
          />
          <Drawer.Screen

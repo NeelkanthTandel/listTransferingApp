@@ -5,19 +5,26 @@ import {
    Text,
    TouchableOpacity,
    ToastAndroid,
+   FlatList,
 } from "react-native";
 import { useIsFocused } from "@react-navigation/native";
 
 import Colors from "../../theme/colors";
 import AvailableCustomer from "../../components/AvailableCustomer";
 import { Ionicons } from "@expo/vector-icons";
+import { API_URL } from "../../keys";
 
 const home = (props) => {
    const [selected, setSelected] = useState(false);
    const [isSelectAll, setIsSelectAll] = useState(-1);
+   const [availableList, setAvailableList] = useState();
+   const [refresh, setRefresh] = useState(true);
    const isFocused = useIsFocused();
+
+   // console.log("Home props: ", props);
+
    useEffect(() => {
-      console.log(props.route.params?.isDone);
+      // console.log(props.route.params?.isDone);
       if (props.route.params?.isDone && isFocused) {
          console.log("Done");
          ToastAndroid.show(
@@ -92,45 +99,73 @@ const home = (props) => {
          });
       }
    }, [selected]);
+
+   const fetchList = async () => {
+      try {
+         const response = await fetch(`${API_URL}/fetchShopkeeperList`, {
+            method: "GET",
+            headers: {
+               "Content-Type": "application/json",
+               authorization: "Bearer " + props.route.params.token,
+            },
+         });
+         const data = await response.json();
+         console.log(data);
+         setAvailableList(data);
+      } catch (err) {
+         console.log("fetch error: ", err.message);
+      }
+      setRefresh(false);
+   };
+
+   useEffect(() => {
+      if (refresh) {
+         fetchList();
+      }
+   }, [refresh]);
+
    return (
       <View style={styles.screen}>
-         <Text style={styles.title}>Available Customer</Text>
-         <Text
-            style={{
-               fontSize: 12,
-               color: Colors.textSecondary,
-               marginBottom: 20,
-            }}
-         >
-            Tap on customer to open their list
-         </Text>
+         <View style={styles.titleContainer}>
+            <View>
+               <Text style={styles.title}>Available Customer</Text>
+               <Text
+                  style={{
+                     fontSize: 12,
+                     color: Colors.textSecondary,
+                  }}
+               >
+                  Tap on customer to open their list
+               </Text>
+            </View>
+            <TouchableOpacity
+               onPress={() => setRefresh(true)}
+               activeOpacity={0.6}
+            >
+               <Ionicons name="ios-refresh-sharp" size={23} />
+            </TouchableOpacity>
+         </View>
 
-         <AvailableCustomer
-            style={styles.availableCustomer}
-            setSelected={setSelected}
-            setIsSelectAll={setIsSelectAll}
-            selected={selected}
-            isSelectAll={isSelectAll}
-            title="Customer 1"
-            navigation={props.navigation}
-         />
-         <AvailableCustomer
-            style={styles.availableCustomer}
-            setSelected={setSelected}
-            setIsSelectAll={setIsSelectAll}
-            selected={selected}
-            isSelectAll={isSelectAll}
-            title="Customer 2"
-            navigation={props.navigation}
-         />
-         <AvailableCustomer
-            style={styles.availableCustomer}
-            setSelected={setSelected}
-            setIsSelectAll={setIsSelectAll}
-            selected={selected}
-            isSelectAll={isSelectAll}
-            title="Customer 3"
-            navigation={props.navigation}
+         <FlatList
+            data={availableList}
+            renderItem={(itemData) => {
+               return (
+                  <AvailableCustomer
+                     style={styles.availableCustomer}
+                     setSelected={setSelected}
+                     setIsSelectAll={setIsSelectAll}
+                     selected={selected}
+                     isSelectAll={isSelectAll}
+                     title={itemData.item.customer_name}
+                     products={itemData.item.products}
+                     navigation={props.navigation}
+                  />
+               );
+            }}
+            keyExtractor={(item) => item._id}
+            refreshing={refresh}
+            onRefresh={() => setRefresh(true)}
+            ListEmptyComponent={() => <Text>No List Found</Text>}
          />
       </View>
    );
@@ -149,6 +184,12 @@ const styles = StyleSheet.create({
       fontSize: 18,
       color: Colors.textPrimary,
       fontWeight: "bold",
+   },
+   titleContainer: {
+      marginBottom: 30,
+      flexDirection: "row",
+      justifyContent: "space-between",
+      alignItems: "center",
    },
    availableCustomer: {
       marginBottom: 20,
