@@ -41,6 +41,7 @@ const Drawer = createDrawerNavigator();
 
 export default function ShopkeeperDrawerNavigator(Props) {
    let toggleDrawer;
+   console.log(Props);
    return (
       <Drawer.Navigator
          screenOptions={{
@@ -134,6 +135,9 @@ export default function ShopkeeperDrawerNavigator(Props) {
             name="Generate QR"
             component={qrGeneratorScreen}
             options={{ swipeEnabled: true }}
+            initialParams={{
+               id: Props.route.params.shop_id,
+            }}
          />
       </Drawer.Navigator>
    );

@@ -42,9 +42,11 @@ const MainNavigator = () => {
             if (data.isShopkeeper) {
                setScreen("shopkeeper");
                setInitialParams({
-                  email: data.email,
-                  name: data.name,
-                  shopName: data.shop_name,
+                  email: data.user.email,
+                  name: data.user.name,
+                  shopName: data.user.shop_name,
+                  token,
+                  shop_id: data.user._id,
                });
             } else {
                console.log("customer");

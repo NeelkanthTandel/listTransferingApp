@@ -19,10 +19,10 @@ import Colors from "../../theme/colors";
 
 const screenWidth = Dimensions.get("screen").width;
 
-export default function qrGeneratorScreen() {
+export default function qrGeneratorScreen(props) {
    const [svg, setSvg] = useState();
    const [imageSaved, setImageSaved] = useState();
-
+   console.log("Genrator props: ", props);
    const saveImage = async () => {
       if (svg != null && !imageSaved) {
          await MediaLibrary.requestPermissionsAsync(MediaLibrary.CameraRoll);
@@ -57,7 +57,7 @@ export default function qrGeneratorScreen() {
             </Text>
             <View style={styles.qr}>
                <QRCode
-                  value="Neelkanth Tandel"
+                  value={props.route.params.id}
                   size={screenWidth - 100}
                   getRef={(c) => setSvg(c)}
                />

@@ -47,7 +47,7 @@ const customerNavigator = (props) => {
          <Stack.Screen
             name="productList"
             component={productListScreen}
-            initialParams={{}}
+            initialParams={{ name: props.route.params.name }}
          />
          <Stack.Screen
             name="addProducts"
@@ -143,6 +143,7 @@ export default function CustomerDrawerNavigator(Props) {
             }}
             initialParams={{
                token: Props.route.params.token,
+               name: Props.route.params.name,
             }}
          />
          <Drawer.Screen

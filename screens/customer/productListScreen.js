@@ -141,6 +141,7 @@ const productListScreen = (props) => {
 
    const shareList = async (shop_id) => {
       console.log("shop id:", shop_id);
+      console.log("Token:", props.route.params.name);
       try {
          const response = await fetch(`${API_URL}/shareList`, {
             method: "POST",
@@ -151,7 +152,7 @@ const productListScreen = (props) => {
             body: JSON.stringify({
                shop_id,
                products: uniCurrent.products,
-               customer_name: "First Customer", //need to be changed
+               customer_name: props.route.params.name, //need to be changed
             }),
          });
          const data = await response.json();
