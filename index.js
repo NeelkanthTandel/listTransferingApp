@@ -31,9 +31,10 @@ app.get("/", requireToken, (req, res) => {
    console.log("get/");
    if (req.isShopkeeper) {
       res.send({
-         email: req.user.email,
-         name: req.user.name,
-         shop_name: req.user.shop_name,
+         // email: req.user.email,
+         // name: req.user.name,
+         // shop_name: req.user.shop_name,
+         user: req.user,
          isShopkeeper: true,
       });
    } else
