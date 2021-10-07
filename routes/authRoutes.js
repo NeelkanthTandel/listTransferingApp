@@ -224,7 +224,12 @@ router.post("/shareList", requireToken, async (req, res) => {
    const { shop_id, products, customer_name } = req.body;
 
    try {
-      const list = new shopkeeper_list({ shop_id, customer_id, products });
+      const list = new shopkeeper_list({
+         shop_id,
+         customer_id,
+         products,
+         customer_name,
+      });
       await list.save();
       return res.send(list._id);
    } catch (err) {
