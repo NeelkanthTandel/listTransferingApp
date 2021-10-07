@@ -104,7 +104,7 @@ const productListScreen = (props) => {
             <TouchableOpacity
                activeOpacity={0.6}
                onPress={() => {
-                  props.navigation.navigate("scanner", {});
+                  props.navigation.navigate("scanner", { shareList, products });
                }}
             >
                <Ionicons
@@ -140,7 +140,7 @@ const productListScreen = (props) => {
    }; //delete product function
 
    const shareList = async (shop_id) => {
-      console.log("shop id:", props.route.params.token);
+      console.log("shop id:", shop_id);
       try {
          const response = await fetch(`${API_URL}/shareList`, {
             method: "POST",

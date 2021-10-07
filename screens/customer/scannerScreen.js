@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { BarCodeScanner } from "expo-barcode-scanner";
 
-export default function scannerScreen() {
+export default function scannerScreen(props) {
    const [hasPermission, setHasPermission] = useState(null);
    const [scanned, setScanned] = useState(false);
 
@@ -13,9 +13,11 @@ export default function scannerScreen() {
       })();
    }, []);
 
-   const handleBarCodeScanned = ({ type, data }) => {
+   const handleBarCodeScanned = async ({ type, data }) => {
       setScanned(true);
-      alert(data);
+      await props.route.params.shareList(data);
+      props.navigation.goBack();
+      // alert(data);
    };
 
    if (hasPermission === null) {
