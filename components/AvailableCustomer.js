@@ -64,6 +64,7 @@ const AvailableCustomer = (props) => {
             } else {
                props.navigation.navigate("customerList", {
                   title: props.title,
+                  products: props.products,
                });
             }
          }}

@@ -6,7 +6,9 @@ import Colors from "../theme/colors";
 
 const ShopkeeperProductView = (props) => {
    const [toggleCheckBox, setToggleCheckBox] = useState(false);
-   const { product, quantity, isGiven } = props;
+   const { itemData, quantity, isGiven } = props;
+
+   console.log("ItemData: ", itemData);
 
    useEffect(() => {
       if (isGiven) {
@@ -49,7 +51,7 @@ const ShopkeeperProductView = (props) => {
             }}
          >
             <Text style={{ fontSize: 16, textTransform: "capitalize" }}>
-               {product}
+               {itemData.item.name}
             </Text>
             <View
                style={{

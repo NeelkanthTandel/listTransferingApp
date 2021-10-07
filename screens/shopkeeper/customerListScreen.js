@@ -13,12 +13,44 @@ import { Ionicons } from "@expo/vector-icons";
 
 import ShopkeeperProductView from "../../components/ShopkeeperProductView";
 import Colors from "../../theme/colors";
+import { API_URL } from "../../keys";
 
 const customerListScreen = (props) => {
    // const [isModalVisible, setIsModalVisible] = useState(true);
    // let count = 0;
+   const { products } = props.route.params;
+   const productIds = products.map((data) => data.product_id);
+   const [productsArray, setProductsArray] = useState();
+   const [selectedProductIds, setSelectedProductIds] = useState();
+
+   console.log("list props:", productIds);
+
    const [count, setCount] = useState(0);
-   console.log(count);
+   // console.log(count);
+
+   const fetchProducts = async () => {
+      try {
+         const response = await fetch(`${API_URL}/fetchProduct`, {
+            method: "POST",
+            headers: {
+               "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+               ids: productIds,
+            }),
+         });
+         const data = await response.json();
+         // console.log("prod:", data);
+         await setProductsArray(data);
+      } catch (err) {
+         console.log(err.message);
+      }
+   };
+
+   useEffect(() => {
+      fetchProducts();
+   }, []);
+
    useEffect(() => {
       props.navigation.setOptions({
          title: props.route.params.title,
@@ -37,7 +69,44 @@ const customerListScreen = (props) => {
             >
                <Text style={{ color: Colors.textSecondary }}>Qty</Text>
             </View>
-            <ShopkeeperProductView
+            <FlatList
+               data={productsArray}
+               renderItem={(itemData) => {
+                  const quantity = products.find(
+                     (data) => data.product_id === itemData.item._id
+                  ).quantity;
+                  const isGiven = products.find(
+                     (data) => data.product_id === itemData.item._id
+                  ).is_given;
+
+                  console.log(
+                     "IN customerList Screen: ",
+                     itemData,
+                     " ",
+                     quantity
+                  );
+
+                  return (
+                     // <ShopkeeperProductView
+                     //    itemData={itemData}
+                     //    quantity={quantity}
+                     //    selectedProductIds={selectedProductIds}
+                     //    setSelectedProductIds={setSelectedProductIds}
+                     //    isGiven={isGiven}
+                     // />
+                     <ShopkeeperProductView
+                        itemData={itemData}
+                        quantity={quantity}
+                        isGiven={isGiven}
+                        selectedProductIds={selectedProductIds}
+                        setSelectedProductIds={setSelectedProductIds}
+                        setCount={setCount}
+                     />
+                  );
+               }}
+               keyExtractor={(item) => item._id}
+            />
+            {/* <ShopkeeperProductView
                product="Product 1"
                quantity={10}
                isGiven={false}
@@ -54,7 +123,7 @@ const customerListScreen = (props) => {
                quantity={2}
                isGiven={false}
                setCount={setCount}
-            />
+            /> */}
          </View>
          <View
             style={{
