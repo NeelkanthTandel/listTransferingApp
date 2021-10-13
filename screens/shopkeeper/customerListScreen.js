@@ -22,8 +22,9 @@ const customerListScreen = (props) => {
    const productIds = products.map((data) => data.product_id);
    const [productsArray, setProductsArray] = useState();
    const [selectedProductIds, setSelectedProductIds] = useState();
+   const [refresh, setRefresh] = useState(true);
 
-   console.log("list props:", productIds);
+   console.log("customer list :", props);
 
    const [count, setCount] = useState(0);
    // console.log(count);
@@ -42,14 +43,15 @@ const customerListScreen = (props) => {
          const data = await response.json();
          // console.log("prod:", data);
          await setProductsArray(data);
+         setRefresh(false);
       } catch (err) {
          console.log(err.message);
       }
    };
 
    useEffect(() => {
-      fetchProducts();
-   }, []);
+      if (refresh) fetchProducts();
+   }, [refresh]);
 
    useEffect(() => {
       props.navigation.setOptions({
@@ -79,13 +81,6 @@ const customerListScreen = (props) => {
                      (data) => data.product_id === itemData.item._id
                   ).is_given;
 
-                  console.log(
-                     "IN customerList Screen: ",
-                     itemData,
-                     " ",
-                     quantity
-                  );
-
                   return (
                      // <ShopkeeperProductView
                      //    itemData={itemData}
@@ -104,6 +99,8 @@ const customerListScreen = (props) => {
                      />
                   );
                }}
+               refreshing={refresh}
+               onRefresh={() => setRefresh(true)}
                keyExtractor={(item) => item._id}
             />
             {/* <ShopkeeperProductView
@@ -136,7 +133,7 @@ const customerListScreen = (props) => {
          >
             <TouchableOpacity
                onPress={() => {
-                  if (count < 3) {
+                  if (count < productsArray.length) {
                      Alert.alert(
                         "Confirmation",
                         "Few products are remaining. Do you want to still continue?",
@@ -148,6 +145,8 @@ const customerListScreen = (props) => {
                                  props.navigation.navigate("home", {
                                     isDone: true,
                                     listName: props.route.params.title,
+                                    customerName:
+                                       props.route.params.customerName,
                                  }),
                            },
                         ]
@@ -156,6 +155,7 @@ const customerListScreen = (props) => {
                      props.navigation.navigate("home", {
                         isDone: true,
                         listName: props.route.params.title,
+                        customerName: props.route.params.customerName,
                      });
                   }
                }}

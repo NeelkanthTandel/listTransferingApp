@@ -45,6 +45,8 @@ const loginScreen = (props) => {
                            email: result.user.email,
                            name: result.user.name,
                            shopName: data.shopName,
+                           token: data.token,
+                           shop_id: data.shop_id,
                         })
                      );
                   } else {
@@ -53,6 +55,7 @@ const loginScreen = (props) => {
                         StackActions.replace("customerDrawer", {
                            email: result.user.email,
                            name: result.user.name,
+                           token: data.token,
                         })
                      );
                   }

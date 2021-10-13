@@ -8,6 +8,7 @@ import {
    FlatList,
 } from "react-native";
 import { useIsFocused } from "@react-navigation/native";
+import { SearchBar } from "react-native-elements";
 
 import Colors from "../../theme/colors";
 import AvailableCustomer from "../../components/AvailableCustomer";
@@ -20,6 +21,8 @@ const home = (props) => {
    const [availableList, setAvailableList] = useState();
    const [refresh, setRefresh] = useState(true);
    const isFocused = useIsFocused();
+   const [search, setSearch] = useState("");
+   const [filteredList, setFilteredList] = useState();
 
    // console.log("Home props: ", props);
 
@@ -28,7 +31,7 @@ const home = (props) => {
       if (props.route.params?.isDone && isFocused) {
          console.log("Done");
          ToastAndroid.show(
-            "Done with " + props.route.params.listName,
+            "Done with " + props.route.params.customerName,
             ToastAndroid.SHORT
          );
          props.navigation.setParams({ isDone: false, listName: "" });
@@ -79,7 +82,9 @@ const home = (props) => {
          });
       } else {
          props.navigation.setOptions({
-            title: "App Name",
+            title: "LetMe",
+            headerTitleAlign: "center",
+
             headerStyle: {
                backgroundColor: Colors.headerBgColor,
             },
@@ -110,7 +115,7 @@ const home = (props) => {
             },
          });
          const data = await response.json();
-         console.log(data);
+         // console.log(data);
          setAvailableList(data);
       } catch (err) {
          console.log("fetch error: ", err.message);
@@ -124,31 +129,66 @@ const home = (props) => {
       }
    }, [refresh]);
 
+   const handleSearch = (text) => {
+      const formatedText = text.toLowerCase();
+      const filteredData = availableList.filter((user) =>
+         user.customer_name.toLowerCase().includes(formatedText)
+      );
+      setFilteredList(filteredData);
+   };
+
    return (
       <View style={styles.screen}>
+         <SearchBar
+            placeholder="Search"
+            onChangeText={(val) => {
+               setSearch(val);
+               handleSearch(val);
+            }}
+            value={search}
+            inputContainerStyle={{
+               backgroundColor: "white",
+               borderRadius: 10,
+            }}
+            lightTheme
+            containerStyle={{
+               padding: 0,
+               borderTopWidth: 0,
+               borderBottomWidth: 0,
+               borderRadius: 10,
+               marginBottom: 30,
+            }}
+         />
          <View style={styles.titleContainer}>
-            <View>
-               <Text style={styles.title}>Available Customer</Text>
-               <Text
-                  style={{
-                     fontSize: 12,
-                     color: Colors.textSecondary,
-                  }}
-               >
-                  Tap on customer to open their list
-               </Text>
-            </View>
-            <TouchableOpacity
-               onPress={() => setRefresh(true)}
-               activeOpacity={0.6}
-            >
-               <Ionicons name="ios-refresh-sharp" size={23} />
-            </TouchableOpacity>
+            {search ? (
+               <Text style={styles.title}>Search Result</Text>
+            ) : (
+               <>
+                  <View>
+                     <Text style={styles.title}>Available Customer</Text>
+                     <Text
+                        style={{
+                           fontSize: 12,
+                           color: Colors.textSecondary,
+                        }}
+                     >
+                        Tap on customer to open their list
+                     </Text>
+                  </View>
+                  <TouchableOpacity
+                     onPress={() => setRefresh(true)}
+                     activeOpacity={0.6}
+                  >
+                     <Ionicons name="ios-refresh-sharp" size={23} />
+                  </TouchableOpacity>
+               </>
+            )}
          </View>
 
          <FlatList
-            data={availableList}
+            data={search ? filteredList : availableList}
             renderItem={(itemData) => {
+               // console.log("Available cust: ", itemData.item);
                return (
                   <AvailableCustomer
                      style={styles.availableCustomer}
@@ -156,7 +196,8 @@ const home = (props) => {
                      setIsSelectAll={setIsSelectAll}
                      selected={selected}
                      isSelectAll={isSelectAll}
-                     title={itemData.item.customer_name}
+                     customerName={itemData.item.customer_name}
+                     listName={itemData.item.list_name}
                      products={itemData.item.products}
                      navigation={props.navigation}
                   />
@@ -186,7 +227,7 @@ const styles = StyleSheet.create({
       fontWeight: "bold",
    },
    titleContainer: {
-      marginBottom: 30,
+      marginBottom: 20,
       flexDirection: "row",
       justifyContent: "space-between",
       alignItems: "center",

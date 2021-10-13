@@ -4,6 +4,7 @@ import {
    View,
    Text,
    TouchableOpacity,
+   ToastAndroid,
    FlatList,
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
@@ -153,10 +154,14 @@ const productListScreen = (props) => {
                shop_id,
                products: uniCurrent.products,
                customer_name: props.route.params.name, //need to be changed
+               list_name: props.route.params.list_name,
             }),
          });
          const data = await response.json();
          console.log("share: ", data);
+         if (data) {
+            ToastAndroid.show("List shared successfully", ToastAndroid.SHORT);
+         }
       } catch (err) {
          console.log("share list error: ", err.message);
       }

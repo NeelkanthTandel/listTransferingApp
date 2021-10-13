@@ -63,7 +63,8 @@ const AvailableCustomer = (props) => {
                setSelected(!selected);
             } else {
                props.navigation.navigate("customerList", {
-                  title: props.title,
+                  title: props.listName,
+                  customerName: props.customerName,
                   products: props.products,
                });
             }
@@ -77,7 +78,12 @@ const AvailableCustomer = (props) => {
                backgroundColor: selected ? "" : Colors.primary,
             }}
          >
-            <Text style={styles.customerListTitle}>{props.title}</Text>
+            <View>
+               <Text style={styles.customerListTitle}>
+                  {props.customerName}
+               </Text>
+               <Text style={styles.customerName}>{props.listName}</Text>
+            </View>
 
             <OptionsMenu
                customButton={myIcon}
@@ -112,6 +118,10 @@ const styles = StyleSheet.create({
    },
    customerListTitle: {
       fontSize: 16,
+      color: Colors.textPrimary,
+   },
+   customerName: {
+      fontSize: 12,
       color: Colors.textPrimary,
    },
 });
