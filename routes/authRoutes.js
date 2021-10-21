@@ -31,6 +31,7 @@ router.post("/signIn", async (req, res) => {
          registered: true,
          isShopkeeper: true,
          shopName: shopkeeper.shop_name,
+         shop_id: shopkeeper._id,
       });
    }
 
@@ -60,6 +61,20 @@ router.get("/fetchShopkeeperList", requireToken, async (req, res) => {
       const list = await shopkeeper_list.find({ shop_id: shopkeeper_id });
       console.log("shopkeeper list:", list);
       res.send(list);
+   } catch (err) {
+      return res.status(422).send(err.message);
+   }
+});
+
+router.post("/updateShopkeeperList", requireToken, async (req, res) => {
+   const { _id, products } = req.body;
+   // console.log(products);
+   try {
+      const list = await shopkeeper_list.updateOne(
+         { _id },
+         { $set: { products } }
+      );
+      res.send(list._id);
    } catch (err) {
       return res.status(422).send(err.message);
    }
