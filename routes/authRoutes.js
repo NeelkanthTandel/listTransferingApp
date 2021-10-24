@@ -80,6 +80,20 @@ router.post("/updateShopkeeperList", requireToken, async (req, res) => {
    }
 });
 
+router.post("/markDoneShopkeeperList", requireToken, async (req, res) => {
+   const { _id } = req.body;
+   // console.log(products);
+   try {
+      const list = await shopkeeper_list.updateOne(
+         { _id },
+         { $set: { is_done: true } }
+      );
+      res.send({ error: false });
+   } catch (err) {
+      return res.status(422).send(err.message);
+   }
+});
+
 //customer's module api
 
 router.post("/customerSignUp", async (req, res) => {
