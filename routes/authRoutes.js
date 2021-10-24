@@ -98,7 +98,7 @@ router.post("/deleteShopkeeperList", requireToken, async (req, res) => {
    // const customer_id = req.user._id;
    const { _id } = req.body;
    try {
-      const result = await customer_list.deleteOne({ _id });
+      const result = await shopkeeper_list.deleteOne({ _id });
       return res.send(result);
    } catch (err) {
       console.log(err.message);
