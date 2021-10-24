@@ -86,7 +86,7 @@ router.post("/markDoneShopkeeperList", requireToken, async (req, res) => {
    try {
       const list = await shopkeeper_list.updateOne(
          { _id },
-         { $set: { is_done: true } }
+         { $set: { is_done: true }, $setOnInsert: { date: new Date() } }
       );
       res.send({ error: false });
    } catch (err) {

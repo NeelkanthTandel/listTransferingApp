@@ -80,6 +80,9 @@ const shopkeeperListSchema = new mongoose.Schema({
       type: Boolean,
       default: false,
    },
+   date: {
+      type: Date,
+   },
    products: [
       {
          _id: false,
