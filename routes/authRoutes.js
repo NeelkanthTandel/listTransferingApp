@@ -74,7 +74,7 @@ router.post("/updateShopkeeperList", requireToken, async (req, res) => {
          { _id },
          { $set: { products } }
       );
-      res.send(list._id);
+      res.send("Updated");
    } catch (err) {
       return res.status(422).send(err.message);
    }
