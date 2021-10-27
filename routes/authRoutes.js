@@ -274,7 +274,7 @@ router.post("/deleteProduct", requireToken, async (req, res) => {
 router.post("/shareList", requireToken, async (req, res) => {
    const customer_id = req.user._id;
    const { shop_id, products, customer_name, list_name } = req.body;
-   const shop_name = "";
+   let shop_name = "";
    try {
       const user = await shopkeeper_detail.findOne({ _id: shop_id });
       // console.log(user);
