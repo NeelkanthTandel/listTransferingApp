@@ -63,6 +63,10 @@ const shopkeeperListSchema = new mongoose.Schema({
       type: String,
       required: true,
    },
+   shop_name: {
+      type: String,
+      required: true,
+   },
    customer_id: {
       type: String,
       required: true,

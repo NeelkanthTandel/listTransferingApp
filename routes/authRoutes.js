@@ -183,6 +183,17 @@ router.get("/fetchCustomerLists", requireToken, async (req, res) => {
    }
 });
 
+router.get("/fetchCustomerHistory", requireToken, async (req, res) => {
+   const customer_id = req.user._id;
+   try {
+      const list = await shopkeeper_list.find({ customer_id });
+      // console.log("history list:", list);
+      res.send(list);
+   } catch (err) {
+      return res.status(422).send(err.message);
+   }
+});
+
 router.post("/fetchList", requireToken, async (req, res) => {
    const customer_id = req.user._id;
    const { _id } = req.body;
@@ -263,10 +274,20 @@ router.post("/deleteProduct", requireToken, async (req, res) => {
 router.post("/shareList", requireToken, async (req, res) => {
    const customer_id = req.user._id;
    const { shop_id, products, customer_name, list_name } = req.body;
+   const shop_name;
+   try {
+      const user = await shopkeeper_detail.findOne({_id: shop_id});
+      // console.log(user);
+      shop_name=user.shop_name;
+   } catch (err) {
+      console.log(err);
+      return res.send("err");
+   }
 
    try {
       const list = new shopkeeper_list({
          shop_id,
+         shop_name,
          customer_id,
          products,
          customer_name,
