@@ -38,7 +38,7 @@ const addProductsScreen = (props) => {
             },
          });
          const data = await response.json();
-         console.log("fetch prod data:", data);
+         // console.log("fetch prod data:", data);
          setProducts(data);
       } catch (err) {
          console.log("fetch prod error: ", err.message);
