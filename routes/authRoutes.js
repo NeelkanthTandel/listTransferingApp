@@ -9,6 +9,7 @@ const shopkeeper_detail = mongoose.model("shopkeeper_detail");
 const customer_list = mongoose.model("customer_list");
 const shopkeeper_list = mongoose.model("shopkeeper_list");
 const product = mongoose.model("product");
+const productCategories = mongoose.model("productCategories");
 
 router.post("/signIn", async (req, res) => {
    const { email } = req.body; // ==> const Name = req.body.email;
@@ -250,6 +251,15 @@ router.post("/fetchProduct", async (req, res) => {
 router.get("/fetchPopularProduct", async (req, res) => {
    try {
       const prod = await product.find({ popular: true });
+      res.send(prod);
+   } catch (err) {
+      console.log(err.message);
+   }
+});
+
+router.get("/fetchCategories", async (req, res) => {
+   try {
+      const prod = await productCategories.find();
       res.send(prod);
    } catch (err) {
       console.log(err.message);

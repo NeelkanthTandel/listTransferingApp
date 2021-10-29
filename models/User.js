@@ -111,8 +111,18 @@ const productSchema = new mongoose.Schema({
    popular: Boolean,
 });
 
+const productCategoriesSchema = new mongoose.Schema({
+   name: String,
+   product_id: [String],
+});
+
 mongoose.model("customer_list", customerListSchema);
 mongoose.model("shopkeeper_list", shopkeeperListSchema);
 mongoose.model("shopkeeper_detail", shopkeeperUserSchema);
 mongoose.model("customer_detail", customerUserSchema);
 mongoose.model("product", productSchema);
+mongoose.model(
+   "productCategories",
+   productCategoriesSchema,
+   "productCategories"
+);
