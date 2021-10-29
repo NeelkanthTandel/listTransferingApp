@@ -39,6 +39,7 @@ const homeScreen = (props) => {
             },
          });
          const data = await response.json();
+         // console.log(data);
          setMyLists(data);
       } catch (err) {
          console.log("fetch list error:", err);
@@ -151,6 +152,7 @@ const homeScreen = (props) => {
                            setPressedDelete={setPressedDelete}
                            navigation={props.navigation}
                            token={token}
+                           customerName={props.route.params.name}
                         />
                      </>
                   );

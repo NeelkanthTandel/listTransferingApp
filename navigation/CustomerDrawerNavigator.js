@@ -37,7 +37,10 @@ const customerNavigator = (props) => {
          <Stack.Screen
             name="home"
             component={homeScreen}
-            initialParams={{ token: props.route.params.token }}
+            initialParams={{
+               token: props.route.params.token,
+               name: props.route.params.name,
+            }}
          />
          <Stack.Screen
             name="popular"
@@ -153,6 +156,9 @@ export default function CustomerDrawerNavigator(Props) {
                // drawerLabel: "History",
                title: "History",
                swipeEnabled: true,
+            }}
+            initialParams={{
+               token: Props.route.params.token,
             }}
          />
       </Drawer.Navigator>

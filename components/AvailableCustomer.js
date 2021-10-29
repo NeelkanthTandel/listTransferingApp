@@ -4,6 +4,8 @@ import OptionsMenu from "react-native-option-menu";
 
 import Colors from "../theme/colors";
 import { Ionicons } from "@expo/vector-icons";
+import markAsDoneHandler from "../global/markAsDoneHandler";
+import { API_URL } from "../keys";
 
 const AvailableCustomer = (props) => {
    const [selected, setSelected] = useState(false);
@@ -23,6 +25,10 @@ const AvailableCustomer = (props) => {
          console.log(true);
          props.setSelected(true);
       }
+      if (props.isPressedDelete && selected) {
+         console.log("delete");
+         onDeleteHandler();
+      }
    });
    const myIcon = (
       <View
@@ -41,6 +47,36 @@ const AvailableCustomer = (props) => {
          />
       </View>
    );
+
+   const onDoneHandler = () => {
+      markAsDoneHandler(props.customerName, props._id, props.token);
+      props.setRefresh(true);
+   };
+
+   const onDeleteHandler = async () => {
+      props.setRefresh(true);
+      try {
+         const response = await fetch(`${API_URL}/deleteShopkeeperList`, {
+            method: "POST",
+            headers: {
+               "Content-Type": "application/json",
+               Authorization: "Bearer " + props.token,
+            },
+            body: JSON.stringify({
+               _id: props._id,
+            }),
+         });
+         const data = await response.json();
+         console.log("Delete: ", data);
+         props.setRefresh(true);
+         props.setSelected(false);
+         props.setIsSelectAll(false);
+         props.setIsPressedDelete(false);
+      } catch (err) {
+         console.log("shopkeeper list delete: ", err);
+      }
+   };
+
    return (
       <TouchableOpacity
          activeOpacity={0.5}
@@ -66,6 +102,8 @@ const AvailableCustomer = (props) => {
                   title: props.listName,
                   customerName: props.customerName,
                   products: props.products,
+                  token: props.token,
+                  _id: props._id,
                });
             }
          }}
@@ -89,7 +127,7 @@ const AvailableCustomer = (props) => {
                customButton={myIcon}
                destructiveIndex={1}
                options={["Mark as done", "Delete", "Cancel"]}
-               actions={[() => {}, () => {}]}
+               actions={[onDoneHandler, onDeleteHandler]}
             />
          </View>
 

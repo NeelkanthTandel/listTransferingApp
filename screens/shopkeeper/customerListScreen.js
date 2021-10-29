@@ -14,17 +14,20 @@ import { Ionicons } from "@expo/vector-icons";
 import ShopkeeperProductView from "../../components/ShopkeeperProductView";
 import Colors from "../../theme/colors";
 import { API_URL } from "../../keys";
+import markAsDoneHandler from "../../global/markAsDoneHandler";
 
 const customerListScreen = (props) => {
    // const [isModalVisible, setIsModalVisible] = useState(true);
    // let count = 0;
-   const { products } = props.route.params;
+   // const { products } = props.route.params;
+   const [products, setProducts] = useState(props.route.params.products);
    const productIds = products.map((data) => data.product_id);
    const [productsArray, setProductsArray] = useState();
    const [selectedProductIds, setSelectedProductIds] = useState();
    const [refresh, setRefresh] = useState(true);
+   const [isSaved, setIsSaved] = useState(true);
 
-   console.log("customer list :", props);
+   // console.log("customer list :", props.route.params._id);
 
    const [count, setCount] = useState(0);
    // console.log(count);
@@ -56,8 +59,88 @@ const customerListScreen = (props) => {
    useEffect(() => {
       props.navigation.setOptions({
          title: props.route.params.title,
+         // headerLeft: () => (
+         //    <TouchableOpacity
+         //       onPress={() =>
+         //          props.navigation.navigate("home", {
+         //             isUpdated,
+         //          })
+         //       }
+         //    >
+         //       <Ionicons
+         //          name="arrow-back"
+         //          size={25}
+         //          color={Colors.headerTitle}
+         //          style={{ marginRight: 15 }}
+         //       />
+         //    </TouchableOpacity>
+         // ),
       });
    }, []);
+
+   const updateList = async (isSave) => {
+      try {
+         const response = await fetch(`${API_URL}/updateShopkeeperList`, {
+            method: "POST",
+            headers: {
+               "Content-Type": "application/json",
+               Authorization: "Bearer " + props.route.params.token,
+            },
+            body: JSON.stringify({
+               _id: props.route.params._id,
+               products,
+            }),
+         });
+         const data = await response.json();
+         console.log("save: ", isSave);
+         if (!data.error && !isSave) {
+            markDoneAfterUpadting();
+         }
+
+         console.log("updated shopkeeper list");
+      } catch (err) {
+         console.log(err.message);
+      }
+   };
+
+   const onSaveHandler = async () => {
+      if (!isSaved) {
+         await updateList(true);
+         setIsSaved(true);
+         // props.route.params.setIsListUpdated(true);
+      }
+   };
+
+   const markDoneAfterUpadting = async () => {
+      await markAsDoneHandler(
+         props.route.params.customerName,
+         props.route.params._id,
+         props.route.params.token
+      );
+      props.navigation.navigate("home");
+   };
+
+   const onDoneHandler = async () => {
+      // console.log("sel prod:", products);
+
+      if (count < productsArray.length) {
+         Alert.alert(
+            "Confirmation",
+            "Few products are remaining. Do you want to still continue?",
+            [
+               { text: "Cancel", style: "cancel" },
+               {
+                  text: "Continue",
+                  onPress: () =>
+                     isSaved ? markDoneAfterUpadting() : updateList(false),
+               },
+            ]
+         );
+      } else {
+         isSaved ? markDoneAfterUpadting() : updateList(false);
+      }
+   };
+
    return (
       <>
          <View style={styles.screen}>
@@ -96,6 +179,9 @@ const customerListScreen = (props) => {
                         selectedProductIds={selectedProductIds}
                         setSelectedProductIds={setSelectedProductIds}
                         setCount={setCount}
+                        products={products}
+                        setProducts={setProducts}
+                        setIsSaved={setIsSaved}
                      />
                   );
                }}
@@ -127,43 +213,46 @@ const customerListScreen = (props) => {
                width: "100%",
                position: "absolute",
                bottom: 0,
+               flexDirection: "row",
                justifyContent: "center",
                backgroundColor: Colors.headerBgColor,
+               borderTopWidth: 5,
+               borderBottomWidth: 5,
+               borderColor: Colors.headerBgColor,
             }}
          >
             <TouchableOpacity
-               onPress={() => {
-                  if (count < productsArray.length) {
-                     Alert.alert(
-                        "Confirmation",
-                        "Few products are remaining. Do you want to still continue?",
-                        [
-                           { text: "Cancel", style: "cancel" },
-                           {
-                              text: "Continue",
-                              onPress: () =>
-                                 props.navigation.navigate("home", {
-                                    isDone: true,
-                                    listName: props.route.params.title,
-                                    customerName:
-                                       props.route.params.customerName,
-                                 }),
-                           },
-                        ]
-                     );
-                  } else {
-                     props.navigation.navigate("home", {
-                        isDone: true,
-                        listName: props.route.params.title,
-                        customerName: props.route.params.customerName,
-                     });
-                  }
-               }}
+               onPress={onSaveHandler}
                style={{
-                  width: "100%",
+                  width: "50%",
                   height: "100%",
-                  paddingVertical: 15,
+                  paddingVertical: 10,
                   alignItems: "center",
+                  borderRightWidth: 0.25,
+                  borderRightColor: Colors.backgroundColor,
+               }}
+               activeOpacity={0.5}
+               disabled={isSaved}
+            >
+               <Text
+                  style={{
+                     color: isSaved ? "grey" : Colors.headerTitle,
+                     fontSize: 18,
+                     fontWeight: "bold",
+                  }}
+               >
+                  Save
+               </Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+               onPress={onDoneHandler}
+               style={{
+                  width: "50%",
+                  height: "100%",
+                  paddingVertical: 10,
+                  alignItems: "center",
+                  borderLeftWidth: 0.25,
+                  borderLeftColor: Colors.backgroundColor,
                }}
                activeOpacity={0.5}
             >

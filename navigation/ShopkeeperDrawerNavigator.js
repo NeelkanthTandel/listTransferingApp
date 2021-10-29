@@ -141,6 +141,9 @@ export default function ShopkeeperDrawerNavigator(Props) {
             name="History"
             component={historyScreen}
             options={{ swipeEnabled: true }}
+            initialParams={{
+               token: Props.route.params.token,
+            }}
          />
          <Drawer.Screen
             name="Generate QR"

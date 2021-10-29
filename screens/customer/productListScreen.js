@@ -13,6 +13,7 @@ import { useIsFocused } from "@react-navigation/core";
 import { API_URL } from "../../keys";
 import Colors from "../../theme/colors";
 import PlusButton from "../../components/PlusButton";
+import shareListHandler from "../../global/shareListHandler";
 
 let uniCurrent;
 
@@ -43,7 +44,7 @@ const productListScreen = (props) => {
             }),
          });
          const data = await response.json();
-         console.log("fetched list:", data);
+         // console.log("fetched list:", data);
          setCurrentList(data);
          productIds = data.products.map((data) => data.product_id);
          return await fetchProducts();
@@ -105,7 +106,7 @@ const productListScreen = (props) => {
             <TouchableOpacity
                activeOpacity={0.6}
                onPress={() => {
-                  props.navigation.navigate("scanner", { shareList, products });
+                  props.navigation.navigate("scanner", { shareList });
                }}
             >
                <Ionicons
@@ -141,30 +142,13 @@ const productListScreen = (props) => {
    }; //delete product function
 
    const shareList = async (shop_id) => {
-      console.log("shop id:", shop_id);
-      console.log("Token:", props.route.params.name);
-      try {
-         const response = await fetch(`${API_URL}/shareList`, {
-            method: "POST",
-            headers: {
-               "Content-Type": "application/json",
-               authorization: "Bearer " + props.route.params.token,
-            },
-            body: JSON.stringify({
-               shop_id,
-               products: uniCurrent.products,
-               customer_name: props.route.params.name, //need to be changed
-               list_name: props.route.params.list_name,
-            }),
-         });
-         const data = await response.json();
-         console.log("share: ", data);
-         if (data) {
-            ToastAndroid.show("List shared successfully", ToastAndroid.SHORT);
-         }
-      } catch (err) {
-         console.log("share list error: ", err.message);
-      }
+      shareListHandler(
+         shop_id,
+         props.route.params.token,
+         uniCurrent.products,
+         props.route.params.name,
+         props.route.params.list_name
+      );
    }; //function to share list with shopkeeper
 
    return (

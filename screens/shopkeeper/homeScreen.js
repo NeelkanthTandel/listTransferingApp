@@ -23,20 +23,24 @@ const home = (props) => {
    const isFocused = useIsFocused();
    const [search, setSearch] = useState("");
    const [filteredList, setFilteredList] = useState();
+   const [isPressedDelete, setIsPressedDelete] = useState(false);
 
    // console.log("Home props: ", props);
 
    useEffect(() => {
-      // console.log(props.route.params?.isDone);
-      if (props.route.params?.isDone && isFocused) {
-         console.log("Done");
-         ToastAndroid.show(
-            "Done with " + props.route.params.customerName,
-            ToastAndroid.SHORT
-         );
-         props.navigation.setParams({ isDone: false, listName: "" });
+      if (isFocused && !refresh) {
+         setRefresh(true);
       }
+
+      // if (props.route.params?.isDone && isFocused) {
+      //    ToastAndroid.show(
+      //       "Done with " + props.route.params.customerName,
+      //       ToastAndroid.SHORT
+      //    );
+      //    props.navigation.setParams({ isDone: false, listName: "" });
+      // }
    }, [isFocused]);
+
    useEffect(() => {
       if (selected) {
          props.navigation.setOptions({
@@ -55,7 +59,11 @@ const home = (props) => {
             ),
             headerRight: () => (
                <View style={{ flexDirection: "row" }}>
-                  <TouchableOpacity onPress={() => {}}>
+                  <TouchableOpacity
+                     onPress={() => {
+                        setIsPressedDelete(true);
+                     }}
+                  >
                      <Text
                         style={{
                            fontSize: 16,
@@ -116,7 +124,9 @@ const home = (props) => {
          });
          const data = await response.json();
          // console.log(data);
-         setAvailableList(data);
+         const filteredData = data.filter((ele) => !ele.is_done);
+         // console.log(filteredData);
+         setAvailableList(filteredData);
       } catch (err) {
          console.log("fetch error: ", err.message);
       }
@@ -200,6 +210,11 @@ const home = (props) => {
                      listName={itemData.item.list_name}
                      products={itemData.item.products}
                      navigation={props.navigation}
+                     token={props.route.params.token}
+                     _id={itemData.item._id}
+                     setRefresh={setRefresh}
+                     isPressedDelete={isPressedDelete}
+                     setIsPressedDelete={setIsPressedDelete}
                   />
                );
             }}

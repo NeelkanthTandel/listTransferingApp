@@ -29,6 +29,7 @@ const MainNavigator = () => {
       }
       console.log("Token: ", token);
       try {
+         console.log("authenticating");
          const response = await fetch(`${API_URL}/`, {
             method: "GET",
             headers: {

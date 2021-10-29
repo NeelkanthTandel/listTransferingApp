@@ -6,10 +6,13 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { API_URL } from "../keys";
 import Colors from "../theme/colors";
 import { Ionicons } from "@expo/vector-icons";
+import TextInputModal from "../components/TextInputModal";
+import shareListHandler from "../global/shareListHandler";
 
 const CustomerList = (props) => {
    const [selected, setSelected] = useState(false);
    const { token } = props;
+   const [isModalVisible, setIsModalVisible] = useState(false);
 
    useEffect(() => {
       console.log(props.isSelectAll);
@@ -64,6 +67,38 @@ const CustomerList = (props) => {
       } catch (err) {
          console.log("delete error", err.message);
       }
+   };
+
+   const renameListHandler = async (newName) => {
+      try {
+         const response = await fetch(`${API_URL}/renameCustomerList`, {
+            method: "POST",
+            headers: {
+               "Content-Type": "application/json",
+               authorization: "Bearer " + token,
+            },
+            body: JSON.stringify({
+               _id: props.list._id,
+               list_name: newName,
+            }),
+         });
+         const data = await response.json();
+         console.log("rename res:", data);
+         props.setRefresh(true);
+      } catch (err) {
+         console.log("rename error", err.message);
+      }
+   };
+
+   const shareList = async (shop_id) => {
+      console.log(props.list.products);
+      shareListHandler(
+         shop_id,
+         token,
+         props.list.products,
+         props.customerName,
+         props.list.list_name
+      );
    };
 
    const myIcon = (
@@ -140,10 +175,21 @@ const CustomerList = (props) => {
                   customButton={myIcon}
                   destructiveIndex={2}
                   options={["Share", "Rename", "Delete", "Cancel"]}
-                  actions={[() => {}, () => {}, deleteHandler]}
+                  actions={[
+                     () => props.navigation.navigate("scanner", { shareList }),
+                     () => setIsModalVisible(true),
+                     deleteHandler,
+                  ]}
                />
             </View>
          </View>
+         <TextInputModal
+            headerTitle="Rename List"
+            buttonName="Rename"
+            setIsModalVisible={setIsModalVisible}
+            isModalVisible={isModalVisible}
+            onPress={renameListHandler}
+         />
       </TouchableOpacity>
    );
 };
