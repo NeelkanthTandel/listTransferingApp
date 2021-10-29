@@ -218,6 +218,21 @@ router.post("/deleteCustomerList", requireToken, async (req, res) => {
    }
 });
 
+router.post("/renameCustomerList", requireToken, async (req, res) => {
+   const { _id, list_name } = req.body;
+   const customer_id = req.user.id;
+   // console.log(products);
+   try {
+      const list = await customer_list.updateOne(
+         { _id, customer_id },
+         { $set: { list_name } }
+      );
+      res.send({ error: false });
+   } catch (err) {
+      return res.status(422).send(err.message);
+   }
+});
+
 router.post("/fetchProduct", async (req, res) => {
    const { ids } = req.body;
    try {
