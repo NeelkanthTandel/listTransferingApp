@@ -260,7 +260,7 @@ router.get("/fetchPopularProduct", async (req, res) => {
 router.get("/fetchSavedProduct", requireToken, async (req, res) => {
    const customer_id = req.user._id;
    try {
-      const prod = await product.find({ customer_id });
+      const prod = await product.find({ customer_id, saved: true });
       res.send(prod);
    } catch (err) {
       console.log(err.message);

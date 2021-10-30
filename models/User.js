@@ -110,6 +110,7 @@ const productSchema = new mongoose.Schema({
    name: String,
    popular: Boolean,
    customer_id: String,
+   saved: Boolean,
 });
 
 const productCategoriesSchema = new mongoose.Schema({
