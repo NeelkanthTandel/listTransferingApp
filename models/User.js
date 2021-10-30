@@ -109,6 +109,7 @@ const shopkeeperListSchema = new mongoose.Schema({
 const productSchema = new mongoose.Schema({
    name: String,
    popular: Boolean,
+   customer_id: String,
 });
 
 const productCategoriesSchema = new mongoose.Schema({
