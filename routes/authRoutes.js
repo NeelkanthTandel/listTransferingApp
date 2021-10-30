@@ -267,7 +267,7 @@ router.get("/fetchSavedProduct", requireToken, async (req, res) => {
    }
 });
 
-router.get("/saveProduct", requireToken, async (req, res) => {
+router.post("/saveProduct", requireToken, async (req, res) => {
    const customer_id = req.user._id;
    const { name } = req.body;
    // const signUp = async (email, res) => {
