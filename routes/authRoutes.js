@@ -257,6 +257,26 @@ router.get("/fetchPopularProduct", async (req, res) => {
    }
 });
 
+router.get("/fetchSavedProduct", requireToken, async (req, res) => {
+   const customer_id = req.user._id;
+   try {
+      const prod = await product.find({ customer_id });
+      res.send(prod);
+   } catch (err) {
+      console.log(err.message);
+   }
+});
+
+// router.get("/fetchCategoryProduct", requireToken, async (req, res) => {
+//    const {}
+//    try {
+//       const prod = await product.find({ customer_id });
+//       res.send(prod);
+//    } catch (err) {
+//       console.log(err.message);
+//    }
+// });
+
 router.get("/fetchCategories", async (req, res) => {
    try {
       const prod = await productCategories.find();
