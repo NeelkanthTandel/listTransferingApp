@@ -267,6 +267,19 @@ router.get("/fetchSavedProduct", requireToken, async (req, res) => {
    }
 });
 
+router.get("/saveProduct", requireToken, async (req, res) => {
+   const customer_id = req.user._id;
+   const { name } = req.body;
+   // const signUp = async (email, res) => {
+   try {
+      const prod = new product({ name, customer_id, saved: true });
+      await prod.save();
+      res.send(prod._id);
+   } catch (err) {
+      return res.status(422).send(err.message);
+   }
+});
+
 // router.get("/fetchCategoryProduct", requireToken, async (req, res) => {
 //    const {}
 //    try {
