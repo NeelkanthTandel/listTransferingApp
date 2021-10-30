@@ -15,7 +15,9 @@ const CategoryLabel = (props) => {
       <View style={styles.subContainer}>
          <TouchableOpacity
             onPress={() => {
-               props.navigation.navigate("categoryProducts");
+               props.navigation.navigate("categoryProducts", {
+                  ids: props.ids,
+               });
             }}
          >
             <Text style={styles.categories}>{props.category.name}</Text>
@@ -38,7 +40,7 @@ const Catagories = (props) => {
             },
          });
          const data = await response.json();
-         console.log(data);
+         // console.log(data);
          // setMyLists(data);
          setCategories(data);
       } catch (err) {
@@ -61,6 +63,7 @@ const Catagories = (props) => {
                   <CategoryLabel
                      category={itemData.item}
                      navigation={props.navigation}
+                     ids={itemData.item.product_id}
                   />
                );
             }}

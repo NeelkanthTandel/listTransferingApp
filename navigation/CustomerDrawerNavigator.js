@@ -16,7 +16,7 @@ import productListScreen from "../screens/customer/productListScreen";
 import historyScreen from "../screens/customer/historyScreen";
 import scannerScreen from "../screens/customer/scannerScreen";
 import homeScreen from "../screens/customer/homeScreen";
-import populerProducts from "../screens/customer/populerProducts";
+import populerProducts from "../screens/customer/populerProductsScreen";
 import AddItemModal from "../components/addItemModal";
 import CustomerAddItemTabNavigator from "./CustomerAddItemTabNavigator";
 

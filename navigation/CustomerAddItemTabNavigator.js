@@ -3,19 +3,26 @@ import { StyleSheet } from "react-native";
 import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 
-import SavedProducts from "../screens/customer/saved";
-import Catagories from "../screens/customer/categories";
-import PopulerProducts from "../screens/customer/populerProducts";
+import SavedProducts from "../screens/customer/savedProductsScreen";
+import Catagories from "../screens/customer/categoriesScreen";
+import PopulerProducts from "../screens/customer/populerProductsScreen";
 import colors from "../theme/colors";
-import categoryProducts from "../screens/customer/categoryProducts";
+import categoryProducts from "../screens/customer/categoryProductsScreen";
 
 const Stack = createNativeStackNavigator();
 
-const categoryStack = () => {
+const categoryStack = (props) => {
    return (
       <Stack.Navigator screenOptions={{ headerShown: false }}>
          <Stack.Screen name="categories" component={Catagories} />
-         <Stack.Screen name="categoryProducts" component={categoryProducts} />
+         <Stack.Screen
+            name="categoryProducts"
+            component={categoryProducts}
+            initialParams={{
+               currentList: props.route.params.currentList,
+               drawerProps: props.route.params.drawerProps,
+            }}
+         />
       </Stack.Navigator>
    );
 };
@@ -43,8 +50,19 @@ const CustomerAddItemTabNavigator = (props) => {
             name="categoryStack"
             component={categoryStack}
             options={{ title: "Category" }}
+            initialParams={{
+               currentList: props.route.params.currentList,
+               drawerProps: props,
+            }}
          />
-         <Tab.Screen name="Saved" component={SavedProducts} />
+         <Tab.Screen
+            name="Saved"
+            component={SavedProducts}
+            initialParams={{
+               currentList: props.route.params.currentList,
+               drawerProps: props,
+            }}
+         />
       </Tab.Navigator>
    );
 };

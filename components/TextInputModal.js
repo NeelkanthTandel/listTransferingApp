@@ -55,7 +55,9 @@ const TextInputModal = (props) => {
                </View>
                <View style={styles.body}>
                   <TextInput
-                     placeholder="List Name"
+                     placeholder={
+                        props.placeholder ? props.placeholder : "List Name"
+                     }
                      value={enteredValue}
                      style={styles.inputField}
                      onChangeText={(val) => setEnteredValue(val)}
