@@ -7,6 +7,7 @@ import {
    FlatList,
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
+import { useIsFocused } from "@react-navigation/native";
 
 import Colors from "../../theme/colors";
 import { API_URL } from "../../keys";
@@ -19,17 +20,18 @@ LogBox.ignoreLogs([
    "Non-serializable values were found in the navigation state",
 ]);
 
-var uni;
+var uniSaved;
 
 const savedProductsScreen = (props) => {
    // console.log("token: ", props);
    const [products, setProducts] = useState();
    const [selectedProducts, setSelectedProducts] = useState();
-   uni = selectedProducts;
+   uniSaved = selectedProducts;
    const [refresh, setRefresh] = useState(true);
    const [run, setRun] = useState(false);
    const [isModalVisible, setIsModalVisible] = useState(false);
    const token = props.route.params.drawerProps.route.params.token;
+   const isFocused = useIsFocused();
 
    // console.log(selectedProducts);
    const fetchProducts = async () => {
@@ -88,8 +90,8 @@ const savedProductsScreen = (props) => {
       console.log("Done");
    };
 
-   const updateList = async () => {
-      if (!uni) {
+   const updateSavedList = async () => {
+      if (!uniSaved) {
          return console.log("Nothing to update");
       }
       try {
@@ -101,7 +103,7 @@ const savedProductsScreen = (props) => {
             },
             body: JSON.stringify({
                _id: props.route.params.drawerProps.route.params.list_id,
-               products: uni,
+               products: uniSaved,
             }),
          });
          const result = await response.json();
@@ -112,41 +114,43 @@ const savedProductsScreen = (props) => {
    };
 
    useEffect(() => {
-      props.route.params.drawerProps.navigation.setOptions({
-         title: "Add Product",
-         headerLeft: () => (
-            <TouchableOpacity
-               activeOpacity={0.6}
-               onPress={() => props.navigation.goBack()}
-            >
-               <Ionicons
-                  name={"ios-arrow-back"}
-                  size={28}
-                  color={Colors.headerTitle}
-                  style={{ marginRight: 15 }}
-               />
-            </TouchableOpacity>
-         ),
-         headerRight: () => (
-            <TouchableOpacity
-               activeOpacity={0.6}
-               onPress={async () => {
-                  setRun(true);
-                  setTimeout(async () => {
-                     await updateList();
-                     props.route.params.drawerProps.navigation.goBack();
-                  }, 1);
-               }}
-            >
-               <Ionicons
-                  name={"ios-checkmark"}
-                  size={26}
-                  color={Colors.headerTitle}
-               />
-            </TouchableOpacity>
-         ),
-      });
-   }, []);
+      if (isFocused) {
+         props.route.params.drawerProps.navigation.setOptions({
+            title: "Add Product",
+            headerLeft: () => (
+               <TouchableOpacity
+                  activeOpacity={0.6}
+                  onPress={() => props.navigation.goBack()}
+               >
+                  <Ionicons
+                     name={"ios-arrow-back"}
+                     size={28}
+                     color={Colors.headerTitle}
+                     style={{ marginRight: 15 }}
+                  />
+               </TouchableOpacity>
+            ),
+            headerRight: () => (
+               <TouchableOpacity
+                  activeOpacity={0.6}
+                  onPress={async () => {
+                     setRun(true);
+                     setTimeout(async () => {
+                        await updateSavedList();
+                        props.route.params.drawerProps.navigation.goBack();
+                     }, 1);
+                  }}
+               >
+                  <Ionicons
+                     name={"ios-checkmark"}
+                     size={26}
+                     color={Colors.headerTitle}
+                  />
+               </TouchableOpacity>
+            ),
+         });
+      }
+   }, [isFocused]);
    return (
       <View style={styles.screen}>
          <FlatList
@@ -177,7 +181,7 @@ const savedProductsScreen = (props) => {
                );
             }}
             keyExtractor={(item) => item._id}
-            ListEmptyComponent={<Text>Loading...</Text>}
+            ListEmptyComponent={<Text>No item found</Text>}
             refreshing={refresh}
             onRefresh={() => setRefresh(true)}
          />

@@ -1,36 +1,37 @@
 {
-   "expo": {
-      "name": "LetMe",
-      "slug": "LetMe",
-      "version": "1.0.0",
-      "orientation": "portrait",
-      "icon": "./assets/icon.png",
-      "splash": {
-         "image": "./assets/splash.png",
-         "resizeMode": "contain",
-         "backgroundColor": "#ffffff"
+  "expo": {
+    "name": "LetMe",
+    "slug": "LetMe",
+    "version": "1.0.1",
+    "orientation": "portrait",
+    "icon": "./assets/icon.png",
+    "splash": {
+      "image": "./assets/splash.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#ffffff"
+    },
+    "updates": {
+      "fallbackToCacheTimeout": 0
+    },
+    "assetBundlePatterns": ["**/*"],
+    "ios": {
+      "supportsTablet": true
+    },
+    "android": {
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/icon.png",
+        "backgroundColor": "#FFFFFF"
       },
-      "updates": {
-         "fallbackToCacheTimeout": 0
-      },
-      "assetBundlePatterns": ["**/*"],
-      "ios": {
-         "supportsTablet": true
-      },
-      "android": {
-         "adaptiveIcon": {
-            "foregroundImage": "./assets/adaptive-icon.png",
-            "backgroundColor": "#FFFFFF"
-         },
-         "package": "com.tandelneelkanth.LetMe",
-         "config": {
-            "googleSignIn": {
-               "certificateHash": "AIzaSyA9Pee9B71LxXj0KWONnKNRoJreyeiMG7c"
-            }
-         }
-      },
-      "web": {
-         "favicon": "./assets/favicon.png"
+      "package": "com.tandelneelkanth.LetMe",
+      "config": {
+        "googleSignIn": {
+          "apiKey": "AIzaSyA9Pee9B71LxXj0KWONnKNRoJreyeiMG7c",
+          "certificateHash": "CBB7D40B44B760DDB160388D0677F3815F2F366C"
+        }
       }
-   }
+    },
+    "web": {
+      "favicon": "./assets/favicon.png"
+    }
+  }
 }

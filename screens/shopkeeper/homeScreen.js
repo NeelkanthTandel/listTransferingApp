@@ -150,7 +150,7 @@ const home = (props) => {
    return (
       <View style={styles.screen}>
          <SearchBar
-            placeholder="Search"
+            placeholder="Search Customer"
             onChangeText={(val) => {
                setSearch(val);
                handleSearch(val);
@@ -222,6 +222,7 @@ const home = (props) => {
             refreshing={refresh}
             onRefresh={() => setRefresh(true)}
             ListEmptyComponent={() => <Text>No List Found</Text>}
+            showsVerticalScrollIndicator={false}
          />
       </View>
    );
