@@ -3,7 +3,10 @@ import { StyleSheet, Text, View, TouchableOpacity, Image } from "react-native";
 import * as Google from "expo-google-app-auth";
 import { StackActions } from "@react-navigation/native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { GoogleSignin } from "@react-native-google-signin/google-signin";
+import {
+  GoogleSignin,
+  statusCodes,
+} from "@react-native-google-signin/google-signin";
 
 import { API_URL } from "../keys";
 import Colors from "../theme/colors";
@@ -18,9 +21,22 @@ const loginScreen = (props) => {
   }, []);
 
   const signInWithGoogleAsync = async () => {
-    await GoogleSignin.hasPlayServices();
-    const result = await GoogleSignin.signIn();
-    console.log(result);
+    try {
+      await GoogleSignin.hasPlayServices();
+      const result = await GoogleSignin.signIn();
+      console.log("signin", result);
+    } catch (error) {
+      console.log("e:", error);
+      if (error.code === statusCodes.SIGN_IN_CANCELLED) {
+        // user cancelled the login flow
+      } else if (error.code === statusCodes.IN_PROGRESS) {
+        // operation (e.g. sign in) is in progress already
+      } else if (error.code === statusCodes.PLAY_SERVICES_NOT_AVAILABLE) {
+        // play services not available or outdated
+      } else {
+        // some other error happened
+      }
+    }
     // try {
     //   const result = await Google.logInAsync({
     //     androidClientId:
