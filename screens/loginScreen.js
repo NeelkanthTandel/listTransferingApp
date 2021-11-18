@@ -1,76 +1,88 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { StyleSheet, Text, View, TouchableOpacity, Image } from "react-native";
 import * as Google from "expo-google-app-auth";
 import { StackActions } from "@react-navigation/native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { GoogleSignin } from "@react-native-google-signin/google-signin";
 
 import { API_URL } from "../keys";
 import Colors from "../theme/colors";
 
 const loginScreen = (props) => {
-  const signInWithGoogleAsync = async () => {
-    try {
-      const result = await Google.logInAsync({
-        androidClientId:
-          "295729975949-pqhv120lksjjl52ojos88jm48ah5b1g1.apps.googleusercontent.com",
-        androidStandaloneAppClientId:
-          "295729975949-s720j7b1m3r6n4u4c8kjavugvqt32ppg.apps.googleusercontent.com",
-        scopes: ["profile", "email"],
-      });
+  useEffect(() => {
+    GoogleSignin.configure({
+      webClientId:
+        "295729975949-ejhl8lmrc0asf1su89tk28vi6gv1ccpe.apps.googleusercontent.com",
+      offlineAccess: true,
+    });
+  }, []);
 
-      if (result.type === "success") {
-        console.log(result.user);
-        try {
-          const response = await fetch(`${API_URL}/signIn`, {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-              email: result.user.email,
-            }),
-          });
-          const data = await response.json();
-          console.log("user data:", data);
-          if (!data.registered) {
-            props.navigation.dispatch(
-              StackActions.replace("chooseType", {
-                email: result.user.email,
-                name: result.user.name,
-              })
-            );
-          } else {
-            if (data.isShopkeeper) {
-              AsyncStorage.setItem("token", data.token);
-              props.navigation.dispatch(
-                StackActions.replace("shopkeeperDrawer", {
-                  email: result.user.email,
-                  name: result.user.name,
-                  shopName: data.shopName,
-                  token: data.token,
-                  shop_id: data.shop_id,
-                })
-              );
-            } else {
-              AsyncStorage.setItem("token", data.token);
-              props.navigation.dispatch(
-                StackActions.replace("customerDrawer", {
-                  email: result.user.email,
-                  name: result.user.name,
-                  token: data.token,
-                })
-              );
-            }
-          }
-        } catch (err) {
-          console.log("login error", err);
-        }
-      } else {
-        return { cancelled: true };
-      }
-    } catch (e) {
-      return { error: true };
-    }
+  const signInWithGoogleAsync = async () => {
+    await GoogleSignin.hasPlayServices();
+    const result = await GoogleSignin.signIn();
+    console.log(result);
+    // try {
+    //   const result = await Google.logInAsync({
+    //     androidClientId:
+    //       "295729975949-pqhv120lksjjl52ojos88jm48ah5b1g1.apps.googleusercontent.com",
+    //     androidStandaloneAppClientId:
+    //       "295729975949-s720j7b1m3r6n4u4c8kjavugvqt32ppg.apps.googleusercontent.com",
+    //     scopes: ["profile", "email"],
+    //   });
+
+    //   if (result.type === "success") {
+    //     console.log(result.user);
+    //     try {
+    //       const response = await fetch(`${API_URL}/signIn`, {
+    //         method: "POST",
+    //         headers: {
+    //           "Content-Type": "application/json",
+    //         },
+    //         body: JSON.stringify({
+    //           email: result.user.email,
+    //         }),
+    //       });
+    //       const data = await response.json();
+    //       console.log("user data:", data);
+    //       if (!data.registered) {
+    //         props.navigation.dispatch(
+    //           StackActions.replace("chooseType", {
+    //             email: result.user.email,
+    //             name: result.user.name,
+    //           })
+    //         );
+    //       } else {
+    //         if (data.isShopkeeper) {
+    //           AsyncStorage.setItem("token", data.token);
+    //           props.navigation.dispatch(
+    //             StackActions.replace("shopkeeperDrawer", {
+    //               email: result.user.email,
+    //               name: result.user.name,
+    //               shopName: data.shopName,
+    //               token: data.token,
+    //               shop_id: data.shop_id,
+    //             })
+    //           );
+    //         } else {
+    //           AsyncStorage.setItem("token", data.token);
+    //           props.navigation.dispatch(
+    //             StackActions.replace("customerDrawer", {
+    //               email: result.user.email,
+    //               name: result.user.name,
+    //               token: data.token,
+    //             })
+    //           );
+    //         }
+    //       }
+    //     } catch (err) {
+    //       console.log("login error", err);
+    //     }
+    //   } else {
+    //     return { cancelled: true };
+    //   }
+    // } catch (e) {
+    //   return { error: true };
+    // }
   };
 
   return (
