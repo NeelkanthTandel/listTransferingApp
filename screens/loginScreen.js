@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { StyleSheet, Text, View, TouchableOpacity, Image } from "react-native";
 import * as Google from "expo-google-app-auth";
 import { StackActions } from "@react-navigation/native";
@@ -8,7 +8,10 @@ import { API_URL } from "../keys";
 import Colors from "../theme/colors";
 
 const loginScreen = (props) => {
+  const [loading, setLoading] = useState(false);
+
   const signInWithGoogleAsync = async () => {
+    setLoading(true);
     try {
       const result = await Google.logInAsync({
         androidClientId:
@@ -33,6 +36,7 @@ const loginScreen = (props) => {
           const data = await response.json();
           console.log("user data:", data);
           if (!data.registered) {
+            setLoading(false);
             props.navigation.dispatch(
               StackActions.replace("chooseType", {
                 email: result.user.email,
@@ -42,6 +46,7 @@ const loginScreen = (props) => {
           } else {
             if (data.isShopkeeper) {
               AsyncStorage.setItem("token", data.token);
+              setLoading(false);
               props.navigation.dispatch(
                 StackActions.replace("shopkeeperDrawer", {
                   email: result.user.email,
@@ -53,6 +58,7 @@ const loginScreen = (props) => {
               );
             } else {
               AsyncStorage.setItem("token", data.token);
+              setLoading(false);
               props.navigation.dispatch(
                 StackActions.replace("customerDrawer", {
                   email: result.user.email,
@@ -64,11 +70,14 @@ const loginScreen = (props) => {
           }
         } catch (err) {
           console.log("login error", err);
+          setLoading(false);
         }
       } else {
+        setLoading(false);
         return { cancelled: true };
       }
     } catch (e) {
+      setLoading(false);
       return { error: true };
     }
   };
@@ -90,8 +99,12 @@ const loginScreen = (props) => {
         <Text style={styles.Text}>Register / Sign In</Text>
         <TouchableOpacity
           activeOpacity={0.8}
-          style={styles.button}
+          style={{
+            ...styles.button,
+            backgroundColor: loading ? "rgba(255,255,255,0.5)" : "white",
+          }}
           onPress={signInWithGoogleAsync}
+          disabled={loading}
         >
           <Image
             source={require("../assets/images/btn_google_light_normal_edit.png")}
@@ -102,7 +115,9 @@ const loginScreen = (props) => {
               left: 15,
             }}
           />
-          <Text style={styles.textBox}>Continue with Google</Text>
+          <Text style={styles.textBox}>
+            {loading ? "Please Wait..." : "Continue with Google"}
+          </Text>
         </TouchableOpacity>
       </View>
     </View>
@@ -142,7 +157,6 @@ const styles = StyleSheet.create({
     width: "85%",
     paddingVertical: 6,
     borderRadius: 100,
-    backgroundColor: "white",
     alignItems: "center",
     marginBottom: 30,
     marginTop: 80,
