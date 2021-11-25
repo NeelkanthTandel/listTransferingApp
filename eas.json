@@ -1,0 +1,32 @@
+{
+  "cli": {
+    "version": ">= 0.37.0"
+  },
+  "build": {
+    "development": {
+      "developmentClient": true,
+      "distribution": "internal"
+    },
+    "preview": {
+      "distribution": "internal"
+    },
+    "LetMe": {
+      "distribution": "internal",
+      "android": {
+        "buildType": "apk"
+      }
+    },
+    "LetMe2": {
+      "android": {
+        "gradleCommand": ":app:assembleRelease"
+      }
+    },
+    "LetMe3": {
+      "developmentClient": true
+    },
+    "production": {}
+  },
+  "submit": {
+    "production": {}
+  }
+}
