@@ -1,13 +1,13 @@
-#Getting Started
+# Getting Started
 
 ```
 npm install
 expo start
 ```
 
-##Building apk
+## Building apk
 
-###For managed workflow(Expo)
+### For managed workflow(Expo)
 
 Run the following command
 
@@ -15,7 +15,7 @@ Run the following command
 expo build:android
 ```
 
-###For bare workflow
+### For bare workflow
 
 You'll need eas-cli. Docs https://docs.expo.dev/build-reference/apk/
 
