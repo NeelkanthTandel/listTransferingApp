@@ -1,5 +1,7 @@
 # Getting Started
 
+## Run app in expo Go
+
 ```
 npm install
 expo start
@@ -53,5 +55,5 @@ Remember that you can name the profile whatever you like; we named the profile "
 Now run this last step, it will create downloadable apk and link for that will be there in terminal.
 
 ```
-eas build -p android --profile preview \\here "preview" is name we used while editing eas.json file
+eas build -p android --profile preview //here "preview" is name we used while editing eas.json file
 ```
