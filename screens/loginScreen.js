@@ -15,9 +15,9 @@ const loginScreen = (props) => {
     try {
       const result = await Google.logInAsync({
         androidClientId:
-          "142236917663-5ph6dml3lejk0fko0ghkvhp0n8rli97c.apps.googleusercontent.com",
+          "yourAndroidClientId",
         androidStandaloneAppClientId:
-          "142236917663-hr4pouumfc2loan3tho9acs1u5vt4c2q.apps.googleusercontent.com",
+          "yourAndroidStandaloneAppClientId",
         scopes: ["profile", "email"],
       });
 
